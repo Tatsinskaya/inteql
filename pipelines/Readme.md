@@ -1,9 +1,1 @@
-# Inteql
-
-### To do:
-- Short explanation of the project
-- Add data
-- Add scripts
-- Add notebooks
-- Rquiremends
-- Add figures
+Not sure of what to do? Check these files!
