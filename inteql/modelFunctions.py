@@ -55,7 +55,7 @@ def random_forest_regressor(data, X_label, y_label, random_state, test_size=0.3,
     # Return result object
     return {'rmse':rmse, 'model':model, 'y_pred':y_pred, 'r_value':r_value, 'y_test':y_test}
 
-def dummy_regressor(data, y_label, random_state, test_size=0.3):
+def dummy_regressor(data, X_label, y_label, random_state, test_size=0.3):
     """
     This bla bla bla
     

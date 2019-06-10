@@ -12,15 +12,13 @@ library(ggplot2)
 #library(scales)
 library(tidyr)
 library(ggpubr)
-setwd('/mnt/c/Users/laura/Documents/EBI_internship/TFG/github/notebooks/')
+setwd('/mnt/c/Users/laura/Documents/EBI_internship/inteql/notebooks/')
 ```
 
 # Figure 2
 
 ```{r}
-
-
-data <- read.csv('../data/data_figure2.csv')
+data <- read.csv('../data/Plotting/data_figure2.csv')
 head(data)
 
 
@@ -30,18 +28,18 @@ p <- ggplot(data, aes(RealValue, MeanImputed, color=HowManyTissues)) +
   scale_color_viridis_c()
 p
 
-ggsave('../figures/mean_vs_real.png', p)
+ggsave('../figures/figure_2.png', p)
 
 ```
 
 # Figure 3
 
 ```{r}
-RMSE_data <- read.csv('../../data_RMSE_figure3.tab', sep='\t')
+RMSE_data <- read.csv('../data/Plotting/data_RMSE_figure3.tab', sep='\t')
 head(RMSE_data)
 
 
-rval_data <- read.csv('../../data_rval_figure3.tab', sep='\t')
+rval_data <- read.csv('../data/Plotting/data_rval_figure3.tab', sep='\t')
 head(rval_data)
 
 dataE <- tidyr::gather(RMSE_data, key, value, -Tissue, -n_eQTL)
@@ -76,14 +74,14 @@ p <- ggpubr::ggarrange(pE, pR,
                     common.legend = TRUE, legend = "right")
 
 p
-ggsave('../figures/imputation_box.png', p)
+ggsave('../figures/figure_3.png', p)
 
 ```
 
 
 # Figure 4
 ```{r}
-colors_df <- read.csv('../data/GTEx_v7_Annotations_ColorTissues.csv', stringsAsFactors = F)
+colors_df <- read.csv('../data/GTEx/Annotations/GTEx_v7_Annotations_ColorTissues.csv', stringsAsFactors = F)
 head(colors_df)
 
 color.list <- colors_df$Color
@@ -94,7 +92,7 @@ names(color.list) <- colors_df$Tissue_name
 # eQTL
 
 ```{r}
-tissues_id_eqtl <- colnames(read.csv('../data/GTEx_Analysis_v7_eQTL_allTissues_slope_top_complete.csv.gz'))
+tissues_id_eqtl <- colnames(read.csv('../data/GTEx/eQTL/GTEx_Analysis_v7_eQTL_allTissues_slope_top_complete.csv.gz'))
 tissues_id_eqtl <- tissues_id_eqtl[3:length(tissues_id_eqtl)]
 
 pc_eqtl <- as.data.frame(readRDS('../objects/GTEx_Analysis_v7_eQTL_allTissues_slope_top_complete_pcsX.rds'))
@@ -107,7 +105,7 @@ p <- ggplot(pc_eqtl, aes(PC1, PC2, color=as.factor(tissue))) +
   scale_color_manual(guide=F, values=color.list) + 
   labs(x='Principal Component 1', y='Principal Component 2') 
 p 
-ggsave('../figures/sup1.png', p)
+ggsave('../figures/supplementary_figure_1.png', p)
 ```
 
 
@@ -118,7 +116,7 @@ D_eqtl <- as.matrix(dist(pc_eqtl[1:2]))
 # RNA
 
 ```{r}
-tissues_id_rna <- scan('../data/GTEx_v7_Annotations_TissuesId.txt', what = 's', sep='\n')
+tissues_id_rna <- scan('../data/GTEx/Annotations/GTEx_v7_Annotations_TissuesId.txt', what = 's', sep='\n')
 ```
 
 
@@ -130,12 +128,13 @@ head(pc_rna)
 ```
 
 ```{r}
-pc_centroids_rna = read.csv('../data/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_pc_centroids.csv')
+pc_centroids_rna = read.csv('../data/GTEx/Expression/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_pc_centroids.csv')
 head(pc_centroids_rna)
 ```
 
 
 ```{r}
+head(pc_rna)
 p <- ggplot(pc_rna, aes(PC1, PC2, color=as.factor(tissue))) + 
   geom_point() + 
   theme_minimal() +  
@@ -144,7 +143,7 @@ p <- ggplot(pc_rna, aes(PC1, PC2, color=as.factor(tissue))) +
   geom_point(data = pc_centroids_rna, mapping = aes(x, y), color='#000000') + 
   geom_point(data = pc_centroids_rna, mapping = aes(x, y), fill='#000000', shape=4)
 p 
-ggsave('../figures/sup2.png', p)
+ggsave('../figures/supplementar_figure_2.png', p)
 ```
 
 ```{r}
@@ -178,7 +177,7 @@ data <- (merge(D_eqtl_df, D_rna_df, by=c('tissueB', 'tissueA')))
 ```{r}
 p <- ggplot(data, aes(distance_rna, distance_eQTL)) + geom_point() + theme_minimal()
 p
-ggsave('../figures/fig_4.png', p)
+ggsave('../figures/figure_4.png', p)
 ```
 
 
