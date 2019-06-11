@@ -25,7 +25,7 @@ head(data)
 p <- ggplot(data, aes(RealValue, MeanImputed, color=HowManyTissues)) + 
   geom_point() + 
   theme_minimal() + 
-  scale_color_viridis_c()
+  scale_color_viridis_c() + geom_abline(color='#989898')
 p
 
 ggsave('../figures/figure_2.png', p)
@@ -175,7 +175,7 @@ data <- (merge(D_eqtl_df, D_rna_df, by=c('tissueB', 'tissueA')))
 ```
 
 ```{r}
-p <- ggplot(data, aes(distance_rna, distance_eQTL)) + geom_point() + theme_minimal()
+p <- ggplot(data, aes(distance_rna, distance_eQTL)) + geom_point() + theme_minimal() 
 p
 ggsave('../figures/figure_4.png', p)
 ```
