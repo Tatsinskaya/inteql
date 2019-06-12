@@ -9,8 +9,21 @@ from scipy.stats import linregress
 
 def decision_tree_regressor(data, X_label, y_label, random_state, test_size=0.3, max_depth=None):
     """
-    This bla bla bla
-     clsd
+    This function generate a decision tree regressor. 
+    First it splits the data into train and test. 
+    Then, treins the model.
+    Fnally, predicts the y values for the test set and compute its error.
+    It receives:
+        - Data: as a data frame
+        - List of the feature column names: list
+        - Target column name: str
+        - Random state: float
+        - The size of the test set: float [0,1]
+        - The maximum depth of the tree: int
+    It returns a dictionary:
+        - 'rmse': The root mean square error of the predictor
+        - 'model': The trained model
+        - 'y_pred': The predictions of the test set
     """
     
     # Split data
@@ -32,8 +45,25 @@ def decision_tree_regressor(data, X_label, y_label, random_state, test_size=0.3,
 
 def random_forest_regressor(data, X_label, y_label, random_state, test_size=0.3, max_depth=None, n_estimators=100):
     """
-    This bla bla bla
-    
+    This function generate a Random Forest Regressor. 
+    First it splits the data into train and test. 
+    Then, treins the model.
+    Fnally, predicts the y values for the test set and compute its error.
+    It also computes the regression line for the test and predictions.
+    It receives:
+        - Data: as a data frame
+        - List of the feature column names: list
+        - Target column name: str
+        - Random state: float
+        - The size of the test set: float [0,1]
+        - The maximum depth of the tree: int
+        - The number of estimators: int. By default is 100.
+    It returns a dictionary:
+        - 'rmse': The root mean square error of the predictor
+        - 'model': The trained model
+        - 'y_pred': The predictions of the test set
+        - 'r_value': The R value of the regression line
+        - 'y_test': The target column of the test set
     """
     
     # Split data
@@ -57,8 +87,21 @@ def random_forest_regressor(data, X_label, y_label, random_state, test_size=0.3,
 
 def dummy_regressor(data, X_label, y_label, random_state, test_size=0.3):
     """
-    This bla bla bla
-    
+    This function generate a Dummy regressor. 
+    First it splits the data into train and test. 
+    Then, treins the model.
+    Fnally, predicts the y values for the test set and compute its error.
+    It receives:
+        - Data: as a data frame
+        - List of the feature column names: list
+        - Target column name: str
+        - Random state: float
+        - The size of the test set: float [0,1]
+        - The maximum depth of the tree: int
+    It returns a dictionary:
+        - 'rmse': The root mean square error of the predictor
+        - 'model': The trained model
+        - 'y_pred': The predictions of the test set
     """
     
     # Split data

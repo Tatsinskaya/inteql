@@ -1,4 +1,9 @@
 class ContactMatrix:
+    """
+    This class contain all the Hi-C data for a tissue and chromosome. 
+    It also, containts the methods to normalize and compute the exptected values for contact matrices.
+    The information on how to process the data can be found in Rao et. all 2014 supplementary information.
+    """
     def __init__(self, matrixFolder, chrm, resl):
         self._chrm = chrm
         self._resl = resl
