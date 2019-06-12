@@ -10,5 +10,6 @@ def geneIdVersion2geneId(s): return s.split('.')[0]
 def regionId2pos(s): return int(s.split('|')[1].split(':')[1].split('-')[0])
 def addChrPrefix(s): return 'chr' + str(s)
 def split_list(s): return s.split(',')
+def region2start(x): return x.split(':')[1].split('-')[0]
 
 ## Note: this fucntions are self-explicative, however, any doubt just mail me at avinyo.laura@gmail.com

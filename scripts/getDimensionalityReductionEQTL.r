@@ -24,6 +24,9 @@ library(Rtsne)
 tsne <- Rtsne::Rtsne(t(X), perplexity=15)
 
 # Save object
-saveRDS(tsne$Y, tsne_file)                                                                                                                                                                                                                                                                                                                             # Perform tsne                                                                                                                                                              tsne <- Rtsne::Rtsne(t(Y), perplexity=15)                                                                                                                                                                                                                                                                                                               # Save object                                                                                                                                                               saveRDS(tsne$Y, tsne_file)  
+saveRDS(tsne$Y, tsne_file)  
 
-
+# Perform tsne   
+tsne <- Rtsne::Rtsne(t(Y), perplexity=15)
+# Save object 
+saveRDS(tsne$Y, tsne_file)  
