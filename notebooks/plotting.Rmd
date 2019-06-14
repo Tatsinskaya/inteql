@@ -15,6 +15,25 @@ library(ggpubr)
 setwd('/mnt/c/Users/laura/Documents/EBI_internship/inteql/notebooks/')
 ```
 
+# Figure 1
+```{r}
+data <- read.csv('../data/Plotting/figure_1b.csv')
+head(data)
+
+p <- ggplot(data, aes(Tissue, Importance, fill=Tissue)) + 
+  geom_bar(stat='identity') + 
+  coord_flip() + 
+  theme_minimal() + 
+  scale_y_continuous(labels = scales::comma) + 
+  labs(x = '', y = 'Random Forest Importance') + 
+  scale_fill_manual(guide=F, values=color.list)
+
+p
+
+ggsave('../figures/figure_1b.png', p, width = 210, height = 140,  units = "mm", dpi = 300)
+```
+
+
 # Figure 2
 
 ```{r}
@@ -25,14 +44,16 @@ head(data)
 p <- ggplot(data, aes(RealValue, MeanImputed, color=HowManyTissues)) + 
   geom_point() + 
   theme_minimal() + 
-  scale_color_viridis_c() + geom_abline(color='#989898')
+  scale_color_viridis_c(guide_colorbar('Number of tissues')) + 
+  geom_abline(color='#92a0ab') + 
+  labs(x='Real mean', y='Imputed mean')
 p
 
-ggsave('../figures/figure_2.png', p)
+ggsave('../figures/figure_2.png', p, width = 140, height = 100,  units = "mm", dpi = 300)
 
 ```
 
-# Figure 3
+# Figure 4
 
 ```{r}
 RMSE_data <- read.csv('../data/Plotting/data_RMSE_figure3.tab', sep='\t')
@@ -50,21 +71,23 @@ head(dataR)
 geom_dotplot(aes(color = dose, fill = dose), 
              binaxis='y', stackdir='center')
 
-pE <- ggplot(dataE, aes(key, value, color = n_eQTL)) + 
+pE <- ggplot(dataE, aes(key, value, color = n_eQTL, fill=key)) + 
   geom_boxplot() +
   geom_point() +
   labs(x='Imputation Method', y='Root Mean Squared Error') + 
   theme_minimal() + 
-  scale_color_viridis_c()
+  scale_color_viridis_c(guide_colorbar('Number of eQTLs')) + 
+  scale_fill_manual(values = c('#92a0ab', '#ffffff', '#ffffff', '#ffffff'), guide=F)
 
 pE
 
-pR <- ggplot(dataR, aes(key, value, color=n_eQTL)) + 
+pR <- ggplot(dataR, aes(key, value, color=n_eQTL, fill=key)) + 
   geom_boxplot() +
   geom_point() +
   labs(x='Imputation Method', y='R value') + 
   theme_minimal() + 
-  scale_color_viridis_c()
+  scale_color_viridis_c(guide_colorbar('Number of eQTLs')) + 
+  scale_fill_manual(values = c('#92a0ab', '#ffffff', '#ffffff', '#ffffff'), guide=F)
 pR
 
 
@@ -74,12 +97,12 @@ p <- ggpubr::ggarrange(pE, pR,
                     common.legend = TRUE, legend = "right")
 
 p
-ggsave('../figures/figure_3.png', p)
+ggsave('../figures/figure_4.png', p,  width = 180, height = 80,  units = "mm", dpi = 300)
 
 ```
 
 
-# Figure 4
+# Figure 3
 ```{r}
 colors_df <- read.csv('../data/GTEx/Annotations/GTEx_v7_Annotations_ColorTissues.csv', stringsAsFactors = F)
 head(colors_df)
@@ -94,10 +117,12 @@ names(color.list) <- colors_df$Tissue_name
 ```{r}
 tissues_id_eqtl <- colnames(read.csv('../data/GTEx/eQTL/GTEx_Analysis_v7_eQTL_allTissues_slope_top_complete.csv.gz'))
 tissues_id_eqtl <- tissues_id_eqtl[3:length(tissues_id_eqtl)]
+tissues_id_eqtl[48] <- "Cells_EBV-transformed_lymphocytes"
+tissues_id_eqtl[18] <- "Brain_Spinal_cord_cervical_c-1"
 
 pc_eqtl <- as.data.frame(readRDS('../objects/GTEx_Analysis_v7_eQTL_allTissues_slope_top_complete_pcsX.rds'))
 pc_eqtl$tissue <- tissues_id_eqtl
-head(pc_eqtl)
+tail(pc_eqtl)
 
 p <- ggplot(pc_eqtl, aes(PC1, PC2, color=as.factor(tissue))) + 
   geom_point() + 
@@ -143,7 +168,7 @@ p <- ggplot(pc_rna, aes(PC1, PC2, color=as.factor(tissue))) +
   geom_point(data = pc_centroids_rna, mapping = aes(x, y), color='#000000') + 
   geom_point(data = pc_centroids_rna, mapping = aes(x, y), fill='#000000', shape=4)
 p 
-ggsave('../figures/supplementar_figure_2.png', p)
+#ggsave('../figures/supplementar_figure_2.png', p)
 ```
 
 ```{r}
@@ -175,11 +200,33 @@ data <- (merge(D_eqtl_df, D_rna_df, by=c('tissueB', 'tissueA')))
 ```
 
 ```{r}
-p <- ggplot(data, aes(distance_rna, distance_eQTL)) + geom_point() + theme_minimal() 
+p <- ggplot(data, aes(distance_rna, distance_eQTL)) + 
+  geom_point() + 
+  theme_minimal() + 
+  labs(x = 'RNA expression PCA centroids distance', y='eQTL PCA distance')
 p
-ggsave('../figures/figure_4.png', p)
+ggsave('../figures/figure_3.png', p,  width = 80, height = 80,  units = "mm", dpi = 300)
+```
+
+```{r}
+cor.pc <- cor.test(data$distance_eQTL, data$distance_rna, method = 'pearson')
+cor.pc
 ```
 
 
+
+## GTEX LEGENT
+
+```{r}
+p <- ggplot(pc_eqtl, aes(PC1, PC2, color=as.factor(tissue))) + 
+  geom_point() + 
+  theme_minimal() +  
+  scale_color_manual(values=color.list, name='') 
+
+l <- ggpubr::get_legend(p)
+leg <- ggpubr::as_ggplot(l)
+
+ggsave('../figures/gtex_legend.png', leg)
+```
 
 
