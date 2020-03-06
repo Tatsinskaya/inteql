@@ -16,7 +16,8 @@ eQTL data imputation script was also developed but it is currently not used in t
 
 # HOW TO USE
 
-All the data required can be downloaded using data/data_download.sh, which can take a long time due to the size of the files.
+Make sure that postgap is installed and it's databases are properly referenced. 
+The rest of the data required can be downloaded using data/data_download.sh, which can take a long time due to the size of the files.
 Use pipelines/pipeline-inteql.sh as an example of how to run the pipeline on an LSF platform, adjusting any desired path or value.
 
 Increasing the number of top expressed genes used may dramatically affect memory requirements. 
