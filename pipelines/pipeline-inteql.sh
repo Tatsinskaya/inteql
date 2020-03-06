@@ -1,8 +1,9 @@
 #!/bin/bash
+
 #INPUTS
 inputdata='../data/original-data'
 inputGTEX=$inputdata"/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_tpm.gct.gz"
-eQTLFolder=$inputdata"/GTEx_Analysis_v7_eQTL/"
+eQTLFolder=$inputdata"/GTEx_Analysis_v7_eQTL_all_associations/"
 TargetFinder=$inputdata"/TargetFinder/"
 databases=$inputdata"/databases/"
 HiCFolder=$inputdata"/GM12878_combined/5kb_resolution_intrachromosomal"
@@ -11,7 +12,7 @@ scriptfolder='/nfs/research1/zerbino/jhidalgo/inteql/scripts/'
 regbuildgff=$inputdata'/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
 
 #OUTPUTS
-outputfolder="/nfs/research1/zerbino/jhidalgo/inteql/data/output/" ### MUST CONTAIN FINAL /
+outputfolder="../data/output/" ### MUST CONTAIN FINAL /
 output01=$outputfolder"output01"
 output02=$outputfolder"output02.tab"
 #output03="NULL"
@@ -26,7 +27,7 @@ output10=$outputfolder"output10.csv"
 perchroutput10=$outputfolder"modeling/"                            ### MUST CONTAIN FINAL /
 outputstdin=$outputfolder"stdin/"                                  ### MUST CONTAIN FINAL /
 outputstderr=$outputfolder"stderr/"                                ### MUST CONTAIN FINAL /
-backupfolder="/nfs/research1/zerbino/jhidalgo/inteql/data/backup/" ### MUST CONTAIN FINAL /
+backupfolder="../data/backup/" ### MUST CONTAIN FINAL /
 
 topgenes="5000"
 chromosomes="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X"
@@ -50,6 +51,7 @@ echo -e "############\nExecuting script 01_getTopGenesInd.py, time: $(date +"%H:
 bsub -J 'x01x' -M 1000 -o "$outputstdin"output01_my-stdin.txt -e "$outputstderr"output01_my-stderr.txt "python 01_getTopGenesInd.py $inputGTEX $output01 $topgenes"
 bwait -w 'ended(x01x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
+
 ##SCRIPT 02 getTopGenesData###
 echo -e "############\nExecuting script 02_getTopGenesData.py, time: $(date +"%H:%M:%S")"
 bsub -J 'x02x' -M 1000 -o "$outputstdin"output02_my-stdin.txt -e "$outputstderr"output02_my-stderr.txt "python "$scriptfolder"02_getTopGenesData.py "$output01".npy $inputGTEX $output02"
@@ -147,7 +149,7 @@ for a in output04 output05 output07 output08 output09; do
   echo -ne "Genes\t" >>$outputfolder$a"_count.txt"
   zcat ${!a} | cut -f 2 -d "," | sort -u | wc -l >>$outputfolder$a"_count.txt"
   echo -ne "Chromosome\tPosition\tSource\n" >$outputfolder$a"_variant_pos.txt"
-  zcat ${!a} | awk -F $'_' -v SOURCE=${scriptname[$a]} '{if(NR>1) print $1 "\t" $2 "\t" SOURCE}' | sort -h >>$outputfolder$a"_variant_pos.txt"
+  zcat ${!a} | awk -F $'_' -v SOURCE="${scriptname[$a]}" '{if(NR>1) print $1 "\t" $2 "\t" SOURCE}' | sort -h >>$outputfolder$a"_variant_pos.txt"
 done
 
 paste "$outputfolder"output*_count.txt | cut -f 1,2,4,6,8,10 >"$outputfolder"outputall_count.txt
