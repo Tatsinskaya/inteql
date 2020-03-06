@@ -31,7 +31,7 @@ def decision_tree_regressor(data, X_label, y_label, random_state, test_size=0.3,
     y = data[y_label]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
     
-    print(X_train.shape)
+    # print(X_train.shape)
     # Create a model and train it
     model = DecisionTreeRegressor(random_state=random_state, max_depth=max_depth)
     model = model.fit(X_train, y_train)
@@ -89,8 +89,10 @@ def dummy_regressor(data, X_label, y_label, random_state, test_size=0.3):
     """
     This function generate a Dummy regressor. 
     First it splits the data into train and test. 
-    Then, treins the model.
-    Fnally, predicts the y values for the test set and compute its error.
+    Then, trains the model.
+    Finally, predicts the y values for the test set and compute its error.
+    Then, trains the model.
+    Finally, predicts the y values for the test set and compute its error.
     It receives:
         - Data: as a data frame
         - List of the feature column names: list
@@ -116,6 +118,6 @@ def dummy_regressor(data, X_label, y_label, random_state, test_size=0.3):
     # Predict values for test set and asses error
     y_pred = model.predict(X_test)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-    
+
     # Return result object
-    return {'rmse':rmse, 'model':model, 'y_pred':y_pred}
+    return {'rmse': rmse, 'model': model, 'y_pred': y_pred}':y_test}

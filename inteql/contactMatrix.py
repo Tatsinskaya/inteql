@@ -1,7 +1,7 @@
 class ContactMatrix:
     """
     This class contain all the Hi-C data for a tissue and chromosome. 
-    It also, containts the methods to normalize and compute the exptected values for contact matrices.
+    It also, contains the methods to normalize and compute the expected values for contact matrices.
     The information on how to process the data can be found in Rao et. all 2014 supplementary information.
     """
     def __init__(self, matrixFolder, chrm, resl):
@@ -28,7 +28,7 @@ class ContactMatrix:
         matrix = {}
         c = 0
         with open(matrixPath, 'r') as f:
-            for line in f:  
+            for line in f:
                 i, j, m = line.strip().split()
                 i, j, m = int(i), int(j), float(m)
                 if i not in matrix: matrix[i] = {}
