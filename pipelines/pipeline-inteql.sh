@@ -11,7 +11,7 @@ scriptfolder='/nfs/research1/zerbino/jhidalgo/inteql/scripts/'
 regbuildgff=$inputdata'/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
 
 #OUTPUTS
-outputfolder="/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/" ### MUST CONTAIN FINAL /
+outputfolder="/nfs/research1/zerbino/jhidalgo/inteql/data/output/" ### MUST CONTAIN FINAL /
 output01=$outputfolder"output01"
 output02=$outputfolder"output02.tab"
 #output03="NULL"
@@ -34,8 +34,9 @@ chromosomes="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X"
 echo "Executing pre-HiC scripts"
 
 if [ -d $outputfolder ]; then
-  mv $outputfolder $backupfolder"inter_data$(date +"%y%m%d")"
-  echo "Previous run files found, moved to backup/inter_data$(date +"%y%m%d")"
+  mkdir -p $backupfolder
+  mv $outputfolder $backupfolder"output_$(date +"%y%m%d")"
+  echo "Previous run files found, moved to backup/output_$(date +"%y%m%d")"
 else
   echo "Previous run files not found, creating folders..."
 fi

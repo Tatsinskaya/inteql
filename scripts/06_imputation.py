@@ -3,7 +3,7 @@ import pandas as pd
 from scipy.stats import linregress
 from sklearn.metrics import mean_squared_error
 
-eqtl_file = '../data/inter_data/output05.csv.gz' # GTEx_Analysis_v7_eQTL_allTissues_slope_top.csv.gz
+eqtl_file = '../data/output/output05.csv.gz' # GTEx_Analysis_v7_eQTL_allTissues_slope_top.csv.gz
 
 # Read eqtl
 eqtl = pd.read_csv(eqtl_file)
