@@ -48,13 +48,13 @@ mkdir -p $outputstderr
 
 ##SCRIPT 01 getTopGenesInd###
 echo -e "############\nExecuting script 01_getTopGenesInd.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x01x' -M 1000 -o $outputstdin"output01_my-stdin.txt -e "$outputstderr"output01_my-stderr.txt python "$scriptfolder"01_getTopGenesInd.py $inputGTEX $output01 $topgenes"
+bsub -J 'x01x' -M 1000 -o $outputstdin"output01_my-stdin.txt" -e $outputstderr"output01_my-stderr.txt" "python "$scriptfolder"01_getTopGenesInd.py $inputGTEX $output01 $topgenes"
 bwait -w 'ended(x01x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 02 getTopGenesData###
 echo -e "############\nExecuting script 02_getTopGenesData.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x02x' -M 1000 -o $outputstdin"output02_my-stdin.txt -e "$outputstderr"output02_my-stderr.txt python "$scriptfolder"02_getTopGenesData.py "$output01".npy $inputGTEX $output02"
+bsub -J 'x02x' -M 1000 -o $outputstdin"output02_my-stdin.txt" -e $outputstderr"output02_my-stderr.txt" "python "$scriptfolder"02_getTopGenesData.py "$output01".npy $inputGTEX $output02"
 bwait -w 'ended(x02x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 
@@ -63,13 +63,13 @@ echo -e "############\nSkipping script 3, time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 04 ###
 echo -e "############\nExecuting script 04_getPairsIdTop.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x04x' -M 1000 -o $outputstdin"output04_my-stdin.txt -e "$outputstderr"output04_my-stderr.txt python "$scriptfolder"04_getPairsIdTop.py $eQTLFolder $output02 $output04"
+bsub -J 'x04x' -M 1000 -o $outputstdin"output04_my-stdin.txt" -e $outputstderr"output04_my-stderr.txt" "python "$scriptfolder"04_getPairsIdTop.py $eQTLFolder $output02 $output04"
 bwait -w 'ended(x04x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 05 ###
 echo -e "############\nExecuting script 05_getPairsSlopeTop.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x05x' -M 4000 -o $outputstdin"output05_my-stdin.txt -e "$outputstderr"output05_my-stderr.txt python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
+bsub -J 'x05x' -M 4000 -o $outputstdin"output05_my-stdin.txt" -e $outputstderr"output05_my-stderr.txt" "python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
 bwait -w 'ended(x05x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 
@@ -78,13 +78,13 @@ echo -e "############\nSkipping script 6, time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 07 ###
 echo -e "############\nExecuting script 07_addLinear.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x07x' -M 6000 -o $outputstdin"output07_my-stdin.txt -e "$outputstderr"output07_my-stderr.txt python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildgff"
+bsub -J 'x07x' -M 6000 -o $outputstdin"output07_my-stdin.txt" -e $outputstderr"output07_my-stderr.txt" "python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildgff"
 bwait -w 'ended(x07x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 08 ###
 echo -e "############\nExecuting script 08_addHiC.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x08x' -M 60000 -o $outputstdin"output08_my-stdin.txt -e "$outputstderr"output08_my-stderr.txt python2.7 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08"
+bsub -J 'x08x' -M 60000 -o $outputstdin"output08_my-stdin.txt" -e $outputstderr"output08_my-stderr.txt" "python2.7 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08"
 bwait -w 'ended(x08x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 
@@ -93,7 +93,7 @@ echo -e "############\nExecuting script 09_prepareFineMap.py, time: $(date +"%H:
 for i in $chromosomes; do
   echo -e "\nStarting with CHR "$i
   mkdir -p "$perchroutput09"chr_$i
-  bsub -J "x09_"$i"x" -M 3000 -o $outputstdin"output09_my-stdin_chr"$i".txt" -e $outputstderr"output09_my-stderr_chr"$i".txt python2.7 "$scriptfolder"09_prepareFineMap.py $databases $output08 $i $dbSNPFolder "$perchroutput09"output09_"$i".csv.gz" $perchroutput09 $eQTLFolder"Cells_EBV-transformed_lymphocytes.v7.signif_variant_gene_pairs.txt.gz"
+  bsub -J "x09_"$i"x" -M 3000 -o $outputstdin"output09_my-stdin_chr"$i".txt" -e $outputstderr"output09_my-stderr_chr"$i".txt" "python2.7 "$scriptfolder"09_prepareFineMap.py $databases $output08 $i $dbSNPFolder "$perchroutput09"output09_"$i".csv.gz" $perchroutput09 $eQTLFolder"Cells_EBV-transformed_lymphocytes.v7.signif_variant_gene_pairs.txt.gz"
 done
 
 for i in $chromosomes; do
@@ -108,7 +108,7 @@ echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 for i in $chromosomes; do
   if [ -e "$perchroutput09"output09_$i.csv.gz ]; then
     echo -e "############\nExecuting script 10_modeling.py with chr $i, time: $(date +"%H:%M:%S")"
-    bsub -J "x10_"$i"x" -o $outputstdin"output10_my-stdin_chr$i.txt -e "$outputstderr"output10_my-stderr_chr$i.txt -M 3000 python2.7 "$scriptfolder"10_modeling.py "$perchroutput09"output09_"$i".csv.gz $output05 $i "$perchroutput10"output10_"$i".csv"
+    bsub -J "x10_"$i"x" -o $outputstdin"output10_my-stdin_chr$i.txt" -e $outputstderr"output10_my-stderr_chr"$i".txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py "$perchroutput09"output09_"$i".csv.gz $output05 $i "$perchroutput10"output10_"$i".csv"
   else
     echo -e "############\nSkipping script 10_modeling.py with chr $i due to missing file, time: $(date +"%H:%M:%S")"
     bsub -J "x10_"$i"x" -o /dev/null -e /dev/null "sleep 1"
@@ -116,7 +116,7 @@ for i in $chromosomes; do
 done
 
 echo -e "############\nExecuting script 10_modeling.py with All chromosomes, time: $(date +"%H:%M:%S")"
-bsub -J 'x10_ALLx' -o $outputstdin"output10_my-stdin_chrALL.txt -e "$outputstderr"output10_my-stderr_chrALL.txt -M 3000 python2.7 "$scriptfolder"10_modeling.py $output09 $output05 ALL "$perchroutput10"output10_ALL.csv"
+bsub -J 'x10_ALLx' -o $outputstdin"output10_my-stdin_chrALL.txt" -e $outputstderr"output10_my-stderr_chrALL.txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py $output09 $output05 ALL "$perchroutput10"output10_ALL.csv"
 
 for i in $chromosomes; do
   bwait -w "ended(x10_"$i"x)"
