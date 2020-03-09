@@ -11,9 +11,10 @@ wget https://storage.googleapis.com/gtex_analysis_v7/rna_seq_data/GTEx_Analysis_
 ##############################
 ### GTEx Association files ###
 ##############################
-wget https://storage.googleapis.com/gtex_analysis_v7/single_tissue_eqtl_data/GTEx_Analysis_v7_eQTL_all_associations.tar.gz
+wget https://storage.googleapis.com/gtex_analysis_v7/single_tissue_eqtl_data/GTEx_Analysis_v7_eQTL.tar.gz
 mkdir GTEx_Analysis_v7_eQTL
-tar xvzf GTEx_Analysis_v7_eQTL_all_associations.tar.gz
+tar xvzf GTEx_Analysis_v7_eQTL.tar.gz
+rm GTEx_Analysis_v7_eQTL.tar.gz
 
 ############################
 ### Rao et al. HiC files ###

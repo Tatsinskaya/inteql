@@ -3,7 +3,7 @@
 #INPUTS
 inputdata='../data/original-data'
 inputGTEX=$inputdata"/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_tpm.gct.gz"
-eQTLFolder=$inputdata"/GTEx_Analysis_v7_eQTL_all_associations/"
+eQTLFolder=$inputdata"/GTEx_Analysis_v7_eQTL/"
 TargetFinder=$inputdata"/TargetFinder/"
 databases=$inputdata"/databases/"
 HiCFolder=$inputdata"/GM12878_combined/5kb_resolution_intrachromosomal"
