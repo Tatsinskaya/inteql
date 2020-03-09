@@ -1,9 +1,10 @@
 import sys
 import pandas as pd
 import pybedtools
-from utils import *
 import statistics
 import gffpandas.gffpandas as gffpd
+sys.path.append('../inteql/')
+from utils import *
 
 # Read input line
 tpm_top_tab = sys.argv[1]   # '/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output02.tab'

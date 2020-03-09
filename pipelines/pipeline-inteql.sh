@@ -8,7 +8,7 @@ TargetFinder=$inputdata"/TargetFinder/"
 databases=$inputdata"/databases/"
 HiCFolder=$inputdata"/GM12878_combined/5kb_resolution_intrachromosomal"
 dbSNPFolder=$inputdata"/dbSNP/chr-header"
-scriptfolder='/nfs/research1/zerbino/jhidalgo/inteql/scripts/'
+scriptfolder='../scripts/'
 regbuildgff=$inputdata'/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
 
 #OUTPUTS
