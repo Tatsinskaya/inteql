@@ -12,7 +12,7 @@ scriptfolder='/nfs/research1/zerbino/jhidalgo/inteql/scripts/'
 regbuildgff=$inputdata'/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
 
 #OUTPUTS
-outputfolder="../data/output/" ### MUST CONTAIN FINAL /
+outputfolder="../data/output/"                                     ### MUST CONTAIN FINAL /
 output01=$outputfolder"output01"
 output02=$outputfolder"output02.tab"
 #output03="NULL"
@@ -27,7 +27,7 @@ output10=$outputfolder"output10.csv"
 perchroutput10=$outputfolder"modeling/"                            ### MUST CONTAIN FINAL /
 outputstdin=$outputfolder"stdin/"                                  ### MUST CONTAIN FINAL /
 outputstderr=$outputfolder"stderr/"                                ### MUST CONTAIN FINAL /
-backupfolder="../data/backup/" ### MUST CONTAIN FINAL /
+backupfolder="../data/backup/"                                     ### MUST CONTAIN FINAL /
 
 topgenes="5000"
 chromosomes="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X"
