@@ -51,12 +51,14 @@ echo -e "############\nExecuting script 01_getTopGenesInd.py, time: $(date +"%H:
 bsub -J 'x01x' -M 1000 -o $outputstdin"output01_my-stdin.txt" -e $outputstderr"output01_my-stderr.txt" "python "$scriptfolder"01_getTopGenesInd.py $inputGTEX $output01 $topgenes"
 bwait -w 'ended(x01x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
+if [ ! -f $output01".npy" ]; then echo "File $output01 not found." ; exit ; fi
 
 ##SCRIPT 02 getTopGenesData###
 echo -e "############\nExecuting script 02_getTopGenesData.py, time: $(date +"%H:%M:%S")"
 bsub -J 'x02x' -M 1000 -o $outputstdin"output02_my-stdin.txt" -e $outputstderr"output02_my-stderr.txt" "python "$scriptfolder"02_getTopGenesData.py "$output01".npy $inputGTEX $output02"
 bwait -w 'ended(x02x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
+if [ ! -f $output02 ]; then echo "File $output02 not found." ; exit ; fi
 
 ##SCRIPT 03 ###
 echo -e "############\nSkipping script 3, time: $(date +"%H:%M:%S")"
@@ -66,12 +68,14 @@ echo -e "############\nExecuting script 04_getPairsIdTop.py, time: $(date +"%H:%
 bsub -J 'x04x' -M 1000 -o $outputstdin"output04_my-stdin.txt" -e $outputstderr"output04_my-stderr.txt" "python "$scriptfolder"04_getPairsIdTop.py $eQTLFolder $output02 $output04"
 bwait -w 'ended(x04x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
+if [ ! -f $output04 ]; then echo "File $output04 not found." ; exit ; fi
 
 ##SCRIPT 05 ###
 echo -e "############\nExecuting script 05_getPairsSlopeTop.py, time: $(date +"%H:%M:%S")"
 bsub -J 'x05x' -M 4000 -o $outputstdin"output05_my-stdin.txt" -e $outputstderr"output05_my-stderr.txt" "python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
 bwait -w 'ended(x05x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
+if [ ! -f $output05 ]; then echo "File $output05 not found." ; exit ; fi
 
 ##SCRIPT 06 ###
 echo -e "############\nSkipping script 6, time: $(date +"%H:%M:%S")"
@@ -81,12 +85,14 @@ echo -e "############\nExecuting script 07_addLinear.py, time: $(date +"%H:%M:%S
 bsub -J 'x07x' -M 6000 -o $outputstdin"output07_my-stdin.txt" -e $outputstderr"output07_my-stderr.txt" "python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildgff"
 bwait -w 'ended(x07x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
+if [ ! -f $output07 ]; then echo "File $output07 not found." ; exit ; fi
 
 ##SCRIPT 08 ###
 echo -e "############\nExecuting script 08_addHiC.py, time: $(date +"%H:%M:%S")"
 bsub -J 'x08x' -M 60000 -o $outputstdin"output08_my-stdin.txt" -e $outputstderr"output08_my-stderr.txt" "python2.7 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08"
 bwait -w 'ended(x08x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
+if [ ! -f $output08 ]; then echo "File $output08 not found." ; exit ; fi
 
 ###SCRIPT 09###
 echo -e "############\nExecuting script 09_prepareFineMap.py, time: $(date +"%H:%M:%S")"

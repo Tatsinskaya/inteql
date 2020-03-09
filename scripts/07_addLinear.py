@@ -150,18 +150,18 @@ promoter_peaks = promoter_peaks.pivot_table(index='promoter_id', columns='peak_n
 promoter_peaks.columns = ['promoter_id'] + ['promoter_' + i for i in promoter_peaks.columns[1:]]
 
 ####Add regulatory build data
-annotation_gff = gffpd.read_gff3(annotation_gff_file).attributes_to_columns()[['seq_id','bound_start','bound_end','regulatory_feature_stable_id','type','activity']]
-annotation_gff['seq_id'] = 'chr' + annotation_gff['seq_id'].astype(str)
-annotation_gff['name'] = 'GM12878|'+annotation_gff['seq_id'].astype(str)+':'+annotation_gff['bound_start'].astype(str)+'-'+annotation_gff['bound_end'].astype(str)
-
-bed_ann = pybedtools.BedTool.from_dataframe(annotation_gff)
-variant_names = ['chrom','start','end','variant_id']
-annotation_names = ['seq_id','bound_start','bound_end','regulatory_feature_stable_id','type','activity','annotation_id']
-annotation_peaks = variants.intersect(bed_ann, wa=True, wb=True).to_dataframe(names=variant_names+annotation_names)[['variant_id','annotation_id','type','activity']].drop_duplicates()
-ann_data = annotation_peaks.join(pd.get_dummies(annotation_peaks[['type','activity']]))
-ann_data['type'] = 1
-ann_data = ann_data.rename(columns={'type': 'RegElementInfo'}).drop(columns='activity')
-pairs_df = pairs_df.merge(ann_data, on='variant_id', how='left').fillna(0)
+# annotation_gff = gffpd.read_gff3(annotation_gff_file).attributes_to_columns()[['seq_id','bound_start','bound_end','regulatory_feature_stable_id','type','activity']]
+# annotation_gff['seq_id'] = 'chr' + annotation_gff['seq_id'].astype(str)
+# annotation_gff['name'] = 'GM12878|'+annotation_gff['seq_id'].astype(str)+':'+annotation_gff['bound_start'].astype(str)+'-'+annotation_gff['bound_end'].astype(str)
+#
+# bed_ann = pybedtools.BedTool.from_dataframe(annotation_gff)
+# variant_names = ['chrom','start','end','variant_id']
+# annotation_names = ['seq_id','bound_start','bound_end','regulatory_feature_stable_id','type','activity','annotation_id']
+# annotation_peaks = variants.intersect(bed_ann, wa=True, wb=True).to_dataframe(names=variant_names+annotation_names)[['variant_id','annotation_id','type','activity']].drop_duplicates()
+# ann_data = annotation_peaks.join(pd.get_dummies(annotation_peaks[['type','activity']]))
+# ann_data['type'] = 1
+# ann_data = ann_data.rename(columns={'type': 'RegElementInfo'}).drop(columns='activity')
+# pairs_df = pairs_df.merge(ann_data, on='variant_id', how='left').fillna(0)
 pairs_df = pairs_df.merge(enhancer_peaks, on='enhancer_id', how='left')
 pairs_df = pairs_df.merge(promoter_peaks, on='promoter_id', how='left')
 pairs_df = pairs_df.drop_duplicates()
