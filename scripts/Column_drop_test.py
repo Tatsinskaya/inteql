@@ -53,7 +53,7 @@ data_z['z'] = data_z['z'].astype(float)
 data_z['Chromosome'] = data_z['variant_id'].str.split("_",1,expand=True)[0]
 
 np.random.seed(seed = 42)
-data_z['random'] = np.random.random(size = len(X))
+data_z['random'] = np.random.random(size = len(data_z))
 
 # Get list of features names for each subset
 epigenomicFeatures = list(i for i in data_z.columns if i.startswith('enha') or i.startswith('prom'))[2:]
