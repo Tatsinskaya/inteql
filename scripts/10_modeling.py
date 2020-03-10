@@ -10,7 +10,7 @@ from modelFunctions import *
 
 finemap_file = sys.argv[1]      #'/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output09.csv.gz'
 eqtl_file = sys.argv[2]         #'/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output05.csv.gz'
-chr = sys.argv[3]               # Chromosome
+chr = sys.argv[3]               # Chromosome todo unnecessary?
 outfile = sys.argv[4]           # /nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output10_chr.csv.gz
 
 #Finemap data
