@@ -11,8 +11,8 @@ def decision_tree_regressor(data, X_label, y_label, random_state, test_size=0.3,
     """
     This function generate a decision tree regressor. 
     First it splits the data into train and test. 
-    Then, treins the model.
-    Fnally, predicts the y values for the test set and compute its error.
+    Then, trains the model.
+    Finally, predicts the y values for the test set and compute its error.
     It receives:
         - Data: as a data frame
         - List of the feature column names: list
@@ -47,8 +47,8 @@ def random_forest_regressor(data, X_label, y_label, random_state, test_size=0.3,
     """
     This function generate a Random Forest Regressor. 
     First it splits the data into train and test. 
-    Then, treins the model.
-    Fnally, predicts the y values for the test set and compute its error.
+    Then, trains the model.
+    Finally, predicts the y values for the test set and compute its error.
     It also computes the regression line for the test and predictions.
     It receives:
         - Data: as a data frame
@@ -120,4 +120,4 @@ def dummy_regressor(data, X_label, y_label, random_state, test_size=0.3):
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 
     # Return result object
-    return {'rmse': rmse, 'model': model, 'y_pred': y_pred}':y_test}
+    return {'rmse': rmse, 'model': model, 'y_pred': y_pred}
