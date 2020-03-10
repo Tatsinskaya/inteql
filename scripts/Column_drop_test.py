@@ -89,4 +89,4 @@ feature_importances = sorted(feature_importances, key=lambda x: x[1], reverse=Tr
 with open(outfile, 'w+') as f:
     [print('Variable: {:20} Importance: {}'.format(*pair), file=f) for pair in feature_importances]
 
-drop_col_feat_imp(model)
+drop_col_feat_imp(model,X_train,y_train)
