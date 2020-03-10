@@ -40,5 +40,5 @@ cd ..
 ### Ensembl Regulatory build ###
 ################################
 wget ftp://ftp.ensembl.org/pub/grch37/release-99/regulation/homo_sapiens/RegulatoryFeatureActivity/GM12878/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff.gz
-gzip -c homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff.gz > homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff
+gzip -d homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff.gz
 rm homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff.gz

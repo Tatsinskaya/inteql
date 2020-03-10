@@ -7,7 +7,7 @@ eQTLFolder=$inputdata"/GTEx_Analysis_v7_eQTL/"
 TargetFinder=$inputdata"/TargetFinder/"
 databases=$inputdata"/databases/"
 HiCFolder=$inputdata"/GM12878_combined/5kb_resolution_intrachromosomal"
-dbSNPFolder=$inputdata"/dbSNP/chr-header"
+dbSNPFolder=$inputdata"/dbSNP/chr-header/"
 scriptfolder='../scripts/'
 regbuildgff=$inputdata'/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
 
