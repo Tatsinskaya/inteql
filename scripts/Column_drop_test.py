@@ -40,7 +40,7 @@ def drop_col_feat_imp(model, X_train, y_train, random_state=42):
         model_clone.fit(X_train.drop(col, axis=1), y_train)
         drop_col_score = model_clone.score(X_train.drop(col, axis=1), y_train)
         importances.append(benchmark_score - drop_col_score)
-        print(col, importance, sep="\t")
+        print(col, importances, sep="\t")
     importances_df = imp_df(X_train.columns, importances)
     return importances_df
 
