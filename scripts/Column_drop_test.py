@@ -40,8 +40,8 @@ def drop_col_feat_imp(model, X_train, y_train, random_state=42):
         model_clone.fit(X_train.drop(col, axis=1), y_train)
         drop_col_score = model_clone.score(X_train.drop(col, axis=1), y_train)
         importances.append(benchmark_score - drop_col_score)
-        print(col, importances, sep="\t")
     importances_df = imp_df(X_train.columns, importances)
+    print(importances_df)
     return importances_df
 
 
@@ -69,8 +69,9 @@ hiCFeatures = list(i for i in data_z.columns if i.startswith('hi'))
 eQTLFeatures = list(eqtl.columns[2:-1])
 distanceFeature = ['var_prom_distance', 'var_enh_distance']
 chrFeature = ['Chromosome']
+randomFeature = ['random']
 
-X_label = epigenomicFeatures + hiCFeatures + eQTLFeatures + distanceFeature
+X_label = epigenomicFeatures + hiCFeatures + eQTLFeatures + distanceFeature + randomFeature + chrFeature
 X = data_z[X_label]
 y = data_z['z']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
@@ -88,5 +89,4 @@ feature_importances = sorted(feature_importances, key=lambda x: x[1], reverse=Tr
 
 with open(outfile, 'w+') as f:
     [print('Variable: {:20} Importance: {}'.format(*pair), file=f) for pair in feature_importances]
-
-drop_col_feat_imp(model,X_train,y_train)
+    print(drop_col_feat_imp(model,X_train,y_train), file=f)
