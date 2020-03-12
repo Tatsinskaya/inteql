@@ -87,6 +87,8 @@ importances = list(model.feature_importances_)
 feature_importances = [(feature, round(importance, 2)) for feature, importance in zip(feature_list, importances)]
 feature_importances = sorted(feature_importances, key=lambda x: x[1], reverse=True)
 
-with open(outfile, 'w+') as f:
-    [print('Variable: {:20} Importance: {}'.format(*pair), file=f) for pair in feature_importances]
-    print(drop_col_feat_imp(model,X_train,y_train), file=f)
+# with open(outfile, 'w+') as f:
+[print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importances]
+
+drop = pd.DataFrame(drop_col_feat_imp(model,X_train,y_train))
+drop.to_csv(outfile)
