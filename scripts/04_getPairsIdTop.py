@@ -48,4 +48,4 @@ for tissue in tissues_names:
 
 # Save the data
 variant_id, gene_id = tuple(zip(*pairs))
-pd.DataFrame({'variant_id': variant_id, 'gene_id':gene_id }).to_csv(out_file, index=False, compression='gzip')
+pd.DataFrame({'variant_id': variant_id, 'gene_id': gene_id}).to_csv(out_file, index=False, compression='gzip')

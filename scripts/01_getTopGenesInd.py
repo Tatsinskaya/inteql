@@ -3,6 +3,7 @@ import numpy as np
 import gzip
 import sys
 import pyensembl
+
 # import requests, json
 
 # def fetch_endpoint(server, request, content_type):
@@ -15,12 +16,13 @@ import pyensembl
 # Read imput line
 in_file = sys.argv[1]
 out_file = sys.argv[2]
-l = int(sys.argv[3])
+length = int(sys.argv[3])
 
 # server = "http://grch37.rest.ensembl.org/"
 # con = "application/json"
 ensembl = pyensembl.EnsemblRelease(release=75)
-excluding=[["6",28477797,33448354],["17",44165260,44784489],["22",42371706,43416680]] #"CHROMOSOME", START POSITION, END POSITION
+excluding = [["6", 28477797, 33448354], ["17", 44165260, 44784489],
+             ["22", 42371706, 43416680]]  # "CHROMOSOME", START POSITION, END POSITION
 
 # Compute the mean expression of each gene and save it on an array
 c = 0
@@ -31,18 +33,17 @@ with gzip.open(in_file) as infile:
         if c <= 3:  continue
         line = line.strip().split()
         if len(line) < 40: continue
-        geneid=line[0].decode('UTF-8').split(".")[0]
+        geneid = line[0].decode('UTF-8').split(".")[0]
         try:
             gene = ensembl.gene_by_id(geneid)
         except:
-            print('Gene ',geneid,'could not be found.')
+            print('Gene ', geneid, 'could not be found.')
             continue
         break_loop = False
         if any(gene.contig in sublist for sublist in excluding):
             for i in excluding:
-                if gene.contig ==i[0]:
+                if gene.contig == i[0]:
                     if i[1] <= ((gene.start + gene.end) / 2) <= i[2]:
-                        #print('This should be skipped: ',geneid,gene)
                         break_loop = True
                         continue
         if break_loop:
@@ -53,7 +54,7 @@ with gzip.open(in_file) as infile:
             means.append(np.mean(line))
 
 # Select the id of the tissues that are in the top 5k
-m = sorted(means, reverse=True)[l]
+m = sorted(means, reverse=True)[length]
 means = np.array(means)
 selected_ind = np.where(means > m)
 

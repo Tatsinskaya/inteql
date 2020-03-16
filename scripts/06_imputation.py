@@ -1,8 +1,15 @@
 import numpy as np
 import pandas as pd
+import rpy2.robjects as robjects
+from rpy2.robjects import pandas2ri
+from sklearn.metrics import pairwise_distances, mean_squared_error
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
 from scipy.stats import linregress
-from sklearn.metrics import mean_squared_error
 
+##############
+# First Part #
+##############
 eqtl_file = '../data/output/output05.csv.gz' # GTEx_Analysis_v7_eQTL_allTissues_slope_top.csv.gz
 
 # Read eqtl
@@ -17,33 +24,19 @@ data = eqtl[np.invert(pd.isna(eqtl[y_label]))]
 # Get the eQTL that are not specific
 data = data[np.invert(pd.isna(data[X_label])).sum(axis=1) != 0]
 mean = data[X_label].mean(axis=1)
-# mean[:3]
 
 howMany = np.invert(pd.isna(data[X_label])).sum(axis=1)
-#print(howMany[:3])
-
 slope, intercept, rvalue, pvalue, stderr = linregress(data[y_label], mean)
-#print(pvalue < 10E6)
 print('The rvalue is %f and the pvalue %f' % (rvalue, pvalue))
 
 np.sqrt(mean_squared_error(data[y_label], mean))
 
-
-
-
-# Second Part
-#import os
-import rpy2.robjects as robjects
-from rpy2.robjects import pandas2ri
-
+###############
+# Second Part #
+###############
 pandas2ri.activate()
 readRDS = robjects.r['readRDS']
 
-from sklearn.metrics import pairwise_distances, mean_squared_error
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
-
-from scipy.stats import linregress
 
 tissues_id = []
 with open('/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/Annotations/GTEx_v7_Annotations_TissuesId.txt') as f:

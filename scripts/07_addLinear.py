@@ -11,7 +11,7 @@ tpm_top_tab = sys.argv[1]   # '/nfs/research1/zerbino/jhidalgo/inteql/data/inter
 slope_top = sys.argv[2]     # '/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output05.csv.gz'
 bedfolder = sys.argv[3]     # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/TargetFinder/'
 outfile = sys.argv[4]       # '/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output07.csv.gz'  GTEx_Analysis_v7_eQTL_EVB_linearData.csv.gz = output05.csv.gz
-annotation_gff_file = sys.argv[5] #'/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
+annotation_gff_file = sys.argv[5]  # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
 
 genes_top = set()
 header = True
@@ -37,7 +37,7 @@ variants = pybedtools.BedTool.from_dataframe(pd.DataFrame({
     'variant_chr': data['variant_id'].apply(variantId2chr),
     'variant_start': data['variant_id'].apply(variantId2pos),
     'variant_end': data['variant_id'].apply(variantId2end),
-    'variant_id': data['variant_id']}) \
+    'variant_id': data['variant_id']})
     .reindex(
     columns=['variant_chr', 'variant_start', 'variant_end', 'variant_id']))
 # Enhancer bed table
@@ -50,8 +50,8 @@ variants_enhancers = variants.intersect(enhancers, wa=True, wb=True, loj=True).t
 # Save it as a dictionary
 variantID__enhancersID = {}
 for i in variants_enhancers.index:
-    v = variants_enhancers.loc[i,]['variant_id']
-    e = variants_enhancers.loc[i,]['enhancer_id']
+    v = variants_enhancers.loc[i, ]['variant_id']
+    e = variants_enhancers.loc[i, ]['enhancer_id']
     if v not in variantID__enhancersID:
         variantID__enhancersID[v] = [e]
     else:
@@ -65,12 +65,12 @@ promoters = pybedtools.BedTool(bedfolder+'promoters.bed.gz')
 genes_promoter_names = ['gene_chr', 'gene_start', 'gene_end', 'gene_id', 'smth1', 'strand', 'annotation', 'type',
                         'smth2',
                         'promoter_chr', 'promoter_start', 'promoter_end', 'promoter_id']
-genes_promoters = genes.intersect(promoters, wa=True, wb=True,loj=True).to_dataframe(names=genes_promoter_names)
+genes_promoters = genes.intersect(promoters, wa=True, wb=True, loj=True).to_dataframe(names=genes_promoter_names)
 # Save a dictionary for the future
 geneID__promotersID = {}
 for i in genes_promoters.index:
-    g = genes_promoters.loc[i,]['gene_id']
-    p = genes_promoters.loc[i,]['promoter_id']
+    g = genes_promoters.loc[i, ]['gene_id']
+    p = genes_promoters.loc[i, ]['promoter_id']
     if g not in geneID__promotersID:
         geneID__promotersID[g] = [p]
     else:
@@ -107,7 +107,7 @@ for v, g in pairs_vg:
                 var_prom_distance.append(0)
             if e != '.':
                 enhancerID.append(e)
-                enh_position = int(sum(list(int(x) for x in e.split(":",1)[1].split("-",1)))/2)
+                enh_position = int(sum(list(int(x) for x in e.split(":", 1)[1].split("-", 1)))/2)
                 var_enh_distance.append(abs(var_position - enh_position))
             else:
                 enhancerID.append(0)
@@ -122,11 +122,11 @@ pairs_df = pd.DataFrame({
     'promoter_id': promoterID,
     # 'distance': distance,
     'var_prom_distance': var_prom_distance,
-    'var_enh_distance': var_enh_distance,})
+    'var_enh_distance': var_enh_distance, })
 
 pairs_df = pairs_df.drop_duplicates()
 
-## Add linear data
+# Add linear data
 peaks = pybedtools.BedTool(bedfolder+'peaks.bed.gz')
 methylation = pybedtools.BedTool(bedfolder+'methylation.bed.gz')
 cage = pybedtools.BedTool(bedfolder+'cage.bed.gz')
@@ -149,7 +149,7 @@ promoter_peaks = promoter_peaks.pivot_table(index='promoter_id', columns='peak_n
     .reset_index().fillna(0)
 promoter_peaks.columns = ['promoter_id'] + ['promoter_' + i for i in promoter_peaks.columns[1:]]
 
-####Add regulatory build data
+#### Add regulatory build data
 # annotation_gff = gffpd.read_gff3(annotation_gff_file).attributes_to_columns()[['seq_id','bound_start','bound_end','regulatory_feature_stable_id','type','activity']]
 # annotation_gff['seq_id'] = 'chr' + annotation_gff['seq_id'].astype(str)
 # annotation_gff['name'] = 'GM12878|'+annotation_gff['seq_id'].astype(str)+':'+annotation_gff['bound_start'].astype(str)+'-'+annotation_gff['bound_end'].astype(str)
