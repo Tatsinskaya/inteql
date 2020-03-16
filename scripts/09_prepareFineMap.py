@@ -6,8 +6,7 @@ from pathlib import Path
 import subprocess
 import time
 
-sys.path.append("/homes/jhidalgo/lib/postgap/lib/") #todo fix dependencies
-sys.path.append("/Users/jhidalgo/Desktop/inteql/exec/Dependencies/postgap-master/lib/")
+sys.path.append(sys.argv[8])
 
 import postgap
 import postgap.Globals

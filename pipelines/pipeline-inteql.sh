@@ -10,6 +10,7 @@ HiCFolder=$inputdata"/GM12878_combined/5kb_resolution_intrachromosomal"
 dbSNPFolder=$inputdata"/dbSNP/chr-header/"
 scriptfolder='../scripts/'
 regbuildgff=$inputdata'/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
+postgaplib="/homes/jhidalgo/lib/postgap/lib/"
 
 #OUTPUTS
 outputfolder="../data/output/"                                     ### MUST CONTAIN FINAL /
@@ -99,7 +100,7 @@ echo -e "############\nExecuting script 09_prepareFineMap.py, time: $(date +"%H:
 for i in $chromosomes; do
   echo -e "\nStarting with CHR "$i
   mkdir -p "$perchroutput09"chr_$i
-  bsub -J "x09_"$i"x" -M 3000 -o $outputstdin"output09_my-stdin_chr"$i".txt" -e $outputstderr"output09_my-stderr_chr"$i".txt" "python2.7 "$scriptfolder"09_prepareFineMap.py $databases $output08 $i $dbSNPFolder "$perchroutput09"output09_"$i".csv.gz" $perchroutput09 $eQTLFolder"Cells_EBV-transformed_lymphocytes.v7.signif_variant_gene_pairs.txt.gz"
+  bsub -J "x09_"$i"x" -M 3000 -o $outputstdin"output09_my-stdin_chr"$i".txt" -e $outputstderr"output09_my-stderr_chr"$i".txt" "python2.7 "$scriptfolder"09_prepareFineMap.py $databases $output08 $i $dbSNPFolder "$perchroutput09"output09_"$i".csv.gz" $perchroutput09 $eQTLFolder"Cells_EBV-transformed_lymphocytes.v7.signif_variant_gene_pairs.txt.gz" $postgaplib
 done
 
 for i in $chromosomes; do
