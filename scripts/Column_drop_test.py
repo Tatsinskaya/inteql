@@ -9,9 +9,9 @@ from sklearn.dummy import DummyRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from scipy.stats import linregress
-
-sys.path.append('../inteql/')
-from modelFunctions import *
+#
+# sys.path.append('../inteql/')
+# from modelFunctions import *
 
 
 def imp_df(column_names, importances):
@@ -30,7 +30,7 @@ def drop_col_feat_imp(model, X_train, y_train, random_state=42):
     # training and scoring the benchmark model
     model_clone.fit(X_train, y_train)
     benchmark_score = model_clone.score(X_train, y_train)
-    print(benchmark_score)
+    print('Benchmark score: '+benchmark_score)
     # list for storing feature importances
     importances = []
     # iterating over all columns and storing feature importance (difference between benchmark and new model)
