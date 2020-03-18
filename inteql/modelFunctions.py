@@ -43,7 +43,7 @@ def decision_tree_regressor(data, X_label, y_label, random_state, test_size=0.3,
     # Return result object
     return {'rmse':rmse, 'model':model, 'y_pred':y_pred}
 
-def random_forest_regressor(data, X_label, y_label, random_state, test_size=0.3, max_depth=None, n_estimators=100):
+def random_forest_regressor(data, X_label, y_label, random_state, test_size=0.3, max_depth=83, n_estimators=136, min_samples_split=2, min_samples_leaf=1, max_features='sqrt'):
     """
     This function generate a Random Forest Regressor. 
     First it splits the data into train and test. 

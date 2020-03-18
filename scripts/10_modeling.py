@@ -1,17 +1,16 @@
 from __future__ import print_function
 import pandas as pd
+import sys
+from sklearn.tree import export_graphviz
 #import numpy as np
 #from scipy.stats import linregress
-#from sklearn.tree import export_graphviz
 #from sklearn.ensemble import ExtraTreesRegressor
-import sys
 sys.path.append('../inteql/')
 from modelFunctions import *
 
 finemap_file = sys.argv[1]      #'/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output09.csv.gz'
 eqtl_file = sys.argv[2]         #'/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output05.csv.gz'
-chr = sys.argv[3]               # Chromosome todo unnecessary?
-outfile = sys.argv[4]           # /nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output10_chr.csv.gz
+outfile = sys.argv[3]           # /nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output10_chr.csv.gz
 
 #Finemap data
 data_z = pd.read_csv(finemap_file)
@@ -54,7 +53,7 @@ combinations['All'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeatu
 random_state = 42
 
 with open(outfile,'w+') as f:
-    print('Chromosome ' + chr, 'RMSE and R Value for Pre-Finemap and Finemap data', sep='\t', file=f)
+    print(outfile, 'RMSE and R Value for Pre-Finemap and Finemap data', sep='\t', file=f)
     print('Data', 'RF RMSE Slope', 'RF RMSE Z', 'R-value Slope', 'R-Value Z-score', sep='\t', file=f)
     for i in combinations:
         X_label = [item for sublist in combinations[i] for item in sublist]
@@ -65,3 +64,8 @@ with open(outfile,'w+') as f:
         print("{}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}".format(i,random_forest['rmse'],random_forest_z['rmse'], random_forest['r_value'], random_forest_z['r_value']), file=f)
     dummy = dummy_regressor(data_z, X_label, 'z', random_state)
     print('Dummy: {:.4f}'.format(dummy['rmse']), file=f)
+    X_label = epigenomicFeatures+eQTLFeatures
+    export_graphviz(estimator, out_file=outfile+'_tree.dot',
+                    feature_names=X_label,
+                    rounded=True, proportion=False,
+                    precision=2, filled=True)

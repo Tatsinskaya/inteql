@@ -115,7 +115,7 @@ echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 for i in $chromosomes; do
   if [ -e "$perchroutput09"output09_$i.csv.gz ]; then
     echo -e "############\nExecuting script 10_modeling.py with chr $i, time: $(date +"%H:%M:%S")"
-    bsub -J "x10_"$i"x" -o $outputstdin"output10_my-stdin_chr$i.txt" -e $outputstderr"output10_my-stderr_chr"$i".txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py "$perchroutput09"output09_"$i".csv.gz $output05 $i "$perchroutput10"output10_"$i".csv"
+    bsub -J "x10_"$i"x" -o $outputstdin"output10_my-stdin_chr$i.txt" -e $outputstderr"output10_my-stderr_chr"$i".txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py "$perchroutput09"output09_"$i".csv.gz $output05 "$perchroutput10"output10_"$i".csv"
   else
     echo -e "############\nSkipping script 10_modeling.py with chr $i due to missing file, time: $(date +"%H:%M:%S")"
     bsub -J "x10_"$i"x" -o /dev/null -e /dev/null "sleep 1"
@@ -123,7 +123,7 @@ for i in $chromosomes; do
 done
 
 echo -e "############\nExecuting script 10_modeling.py with All chromosomes, time: $(date +"%H:%M:%S")"
-bsub -J 'x10_ALLx' -o $outputstdin"output10_my-stdin_chrALL.txt" -e $outputstderr"output10_my-stderr_chrALL.txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py $output09 $output05 ALL "$perchroutput10"output10_ALL.csv"
+bsub -J 'x10_ALLx' -o $outputstdin"output10_my-stdin_chrALL.txt" -e $outputstderr"output10_my-stderr_chrALL.txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py $output09 $output05 "$perchroutput10"output10_ALL.csv"
 
 for i in $chromosomes; do
   bwait -w "ended(x10_"$i"x)"
