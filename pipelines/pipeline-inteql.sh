@@ -137,7 +137,7 @@ for i in $chromosomes; do
     awk -F $'\t' -v CHR="$i" '{if(NR==2&&CHR==1) print $1 FS $2 FS $3 FS $4 FS $5 FS "Chromosome"; else if(NR>=3&&NR<=11) print $1 FS $2 FS $3 FS $4 FS $5 FS CHR}' $perchroutput10"output10_$i.csv"
   fi
 done >$output10
-awk -F $'\t' '{if(NR>=3&&NR<=11) print $1 FS $2 FS $3 FS $4 FS $5 FS "All"}' $perchroutput10"output10_ALL.csv >> $output10"
+awk -F $'\t' '{if(NR>=3&&NR<=11) print $1 FS $2 FS $3 FS $4 FS $5 FS "All"}' $perchroutput10'output10_ALL.csv' >> $output10
 
 echo -e "############ RUN FINISHED ############"
 echo -e "############ $(date) ############"
