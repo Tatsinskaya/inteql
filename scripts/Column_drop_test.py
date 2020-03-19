@@ -71,12 +71,12 @@ distanceFeature = ['var_prom_distance', 'var_enh_distance']
 chrFeature = ['Chromosome']
 randomFeature = ['random']
 
-X_label = epigenomicFeatures + hiCFeatures + eQTLFeatures + distanceFeature + randomFeature + chrFeature
+X_label = epigenomicFeatures + eQTLFeatures  # + distanceFeature + randomFeature + chrFeature+ hiCFeatures
 X = data_z[X_label]
 y = data_z['z']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 # Create a model and train it
-model = RandomForestRegressor(random_state=42, max_depth=None, n_estimators=100)
+model = RandomForestRegressor(random_state=42)
 model = model.fit(X_train, y_train)
 # Predict values for test set and asses error
 y_pred = model.predict(X_test)

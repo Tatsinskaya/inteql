@@ -62,6 +62,7 @@ with open(outfile,'w+') as f:
         random_forest_z = random_forest_regressor(data_z, X_label, 'z', random_state=random_state)
         # decision_tree_z = decision_tree_regressor(data_z, X_label, 'z', random_state=random_state)
         print("{}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}".format(i,random_forest['rmse'],random_forest_z['rmse'], random_forest['r_value'], random_forest_z['r_value']), file=f)
+        pd.DataFrame(random_forest_z['y_test']).reset_index(drop=True).join(pd.DataFrame(random_forest_z['y_pred'])).to_csv(outfile+'_real_vs_pred.csv')
     dummy = dummy_regressor(data_z, X_label, 'z', random_state)
     print('Dummy: {:.4f}'.format(dummy['rmse']), file=f)
     X_label = epigenomicFeatures+eQTLFeatures
