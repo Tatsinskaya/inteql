@@ -101,11 +101,13 @@ for i in $chromosomes; do
   echo -e "\nStarting with CHR "$i
   mkdir -p "$perchroutput09"chr_$i
   bsub -J "x09_"$i"x" -M 3000 -o $outputstdin"output09_my-stdin_chr"$i".txt" -e $outputstderr"output09_my-stderr_chr"$i".txt" "python2.7 "$scriptfolder"09_prepareFineMap.py $databases $output08 $i $dbSNPFolder "$perchroutput09"output09_"$i".csv.gz" $perchroutput09 $eQTLFolder"Cells_EBV-transformed_lymphocytes.v7.signif_variant_gene_pairs.txt.gz" $postgaplib
+  bwait -w "ended(x09_"$i"x)" # Remove for parallel Finemapping
 done
 
-for i in $chromosomes; do
-  bwait -w "ended(x09_"$i"x)"
-done
+# Uncomment for parallel Finemapping
+#for i in $chromosomes; do
+#  bwait -w "ended(x09_"$i"x)"
+#done
 
 zcat "$perchroutput09"output09_*.csv.gz | sort -h | uniq | gzip -cf >$output09
 
