@@ -8,9 +8,10 @@ from sklearn.tree import export_graphviz
 sys.path.append('../inteql/')
 from modelFunctions import *
 
-finemap_file = sys.argv[1]      #'/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output09.csv.gz'
-eqtl_file = sys.argv[2]         #'/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output05.csv.gz'
-outfile = sys.argv[3]           # /nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output10_chr.csv.gz
+finemap_file = sys.argv[1]      #'/nfs/research1/zerbino/jhidalgo/inteql/data/output/output09.csv.gz'
+eqtl_file = sys.argv[2]         #'/nfs/research1/zerbino/jhidalgo/inteql/data/output/output05.csv.gz'
+outfile = sys.argv[3]           # /nfs/research1/zerbino/jhidalgo/inteql/data/output/output10_chr.csv.gz
+outfolder = sys.argv[4]
 
 #Finemap data
 data_z = pd.read_csv(finemap_file)
@@ -29,6 +30,8 @@ hiCFeatures = list(i for i in data_z.columns if i.startswith('hi'))
 eQTLFeatures = list(eqtl.columns[2:-1])
 distanceFeature = ['var_prom_distance','var_enh_distance']
 chrFeature = ['Chromosome']
+data['position'] = data['variant_id'].str.split('_',expand=True)[1]
+posfeature = ['position']
 
 combinations = {}
 combinations['Epigenomics'] = [epigenomicFeatures]
@@ -49,6 +52,7 @@ combinations['eQTL + Distance'] = [eQTLFeatures+distanceFeature]
 #combinations['Epi + eQTL + RegBuild Act'] = [epigenomicFeatures+distanceFeature+regbuild_activityFeatures]
 #combinations['Epi + eQTL + RegBuild Data'] = [epigenomicFeatures+distanceFeature+regbuild_dataFeature]
 combinations['All'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature]
+combinations['All+Pos'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature+posfeature]
 
 random_state = 42
 
@@ -62,7 +66,10 @@ with open(outfile,'w+') as f:
         random_forest_z = random_forest_regressor(data_z, X_label, 'z', random_state=random_state)
         # decision_tree_z = decision_tree_regressor(data_z, X_label, 'z', random_state=random_state)
         print("{}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}".format(i,random_forest['rmse'],random_forest_z['rmse'], random_forest['r_value'], random_forest_z['r_value']), file=f)
-        pd.DataFrame(random_forest_z['y_test']).reset_index(drop=True).join(pd.DataFrame(random_forest_z['y_pred'])).to_csv(outfile+'_real_vs_pred.csv')
+        pd.DataFrame(random_forest_z['y_test']).reset_index(drop=True).join(pd.DataFrame(random_forest_z['y_pred'])).to_csv(outfolder+i+'_Real_vs_pred.csv')
+        data_z.loc[random_forest_z['y_test'].index].to_csv(outfolder+i+'_ytest.csv')
+        pd.DataFrame(['y_pred']).to_csv(outfolder+i+'_predicted.csv')
+        # data_z.loc[random_forest_z['y_train'].index].to_csv(outfolder+'ytrain.csv')
     dummy = dummy_regressor(data_z, X_label, 'z', random_state)
     print('Dummy: {:.4f}'.format(dummy['rmse']), file=f)
     X_label = epigenomicFeatures+eQTLFeatures

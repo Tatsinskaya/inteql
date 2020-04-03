@@ -116,8 +116,9 @@ echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 ###SCRIPT 10###
 for i in $chromosomes; do
   if [ -e "$perchroutput09"output09_$i.csv.gz ]; then
+    mkdir -p $perchroutput10"/"$i
     echo -e "############\nExecuting script 10_modeling.py with chr $i, time: $(date +"%H:%M:%S")"
-    bsub -J "x10_"$i"x" -o $outputstdin"output10_my-stdin_chr$i.txt" -e $outputstderr"output10_my-stderr_chr"$i".txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py "$perchroutput09"output09_"$i".csv.gz $output05 "$perchroutput10"output10_"$i".csv"
+    bsub -J "x10_"$i"x" -o $outputstdin"output10_my-stdin_chr$i.txt" -e $outputstderr"output10_my-stderr_chr"$i".txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py "$perchroutput09"output09_"$i".csv.gz" $output05 $perchroutput10"output10_"$i".csv" $perchroutput10"/"$i"/"
   else
     echo -e "############\nSkipping script 10_modeling.py with chr $i due to missing file, time: $(date +"%H:%M:%S")"
     bsub -J "x10_"$i"x" -o /dev/null -e /dev/null "sleep 1"
