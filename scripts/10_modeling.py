@@ -20,6 +20,7 @@ data_z = data_z.merge(eqtl, on=['variant_id', 'gene_id']).drop_duplicates()
 data_z = data_z.fillna(0)
 data_z['z'] = data_z['z'].astype(float)
 data_z['Chromosome'] = data_z['variant_id'].str.split("_",1,expand=True)[0]
+data_z['position'] = data_z['variant_id'].str.split('_',expand=True)[1]
 
 # Get list of features names for each subset
 epigenomicFeatures = list(i for i in data_z.columns if i.startswith('enha') or i.startswith('prom'))[2:]
@@ -30,7 +31,6 @@ hiCFeatures = list(i for i in data_z.columns if i.startswith('hi'))
 eQTLFeatures = list(eqtl.columns[2:-1])
 distanceFeature = ['var_prom_distance','var_enh_distance']
 chrFeature = ['Chromosome']
-data['position'] = data['variant_id'].str.split('_',expand=True)[1]
 posfeature = ['position']
 
 combinations = {}
@@ -52,7 +52,7 @@ combinations['eQTL + Distance'] = [eQTLFeatures+distanceFeature]
 #combinations['Epi + eQTL + RegBuild Act'] = [epigenomicFeatures+distanceFeature+regbuild_activityFeatures]
 #combinations['Epi + eQTL + RegBuild Data'] = [epigenomicFeatures+distanceFeature+regbuild_dataFeature]
 combinations['All'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature]
-combinations['All+Pos'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature+posfeature]
+combinations['All + Pos'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature+posfeature]
 
 random_state = 42
 
@@ -72,8 +72,3 @@ with open(outfile,'w+') as f:
         # data_z.loc[random_forest_z['y_train'].index].to_csv(outfolder+'ytrain.csv')
     dummy = dummy_regressor(data_z, X_label, 'z', random_state)
     print('Dummy: {:.4f}'.format(dummy['rmse']), file=f)
-    X_label = epigenomicFeatures+eQTLFeatures
-    export_graphviz(estimator, out_file=outfile+'_tree.dot',
-                    feature_names=X_label,
-                    rounded=True, proportion=False,
-                    precision=2, filled=True)
