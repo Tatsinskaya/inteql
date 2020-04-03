@@ -19,8 +19,8 @@ eqtl = pd.read_csv(eqtl_file)
 data_z = data_z.merge(eqtl, on=['variant_id', 'gene_id']).drop_duplicates()
 data_z = data_z.fillna(0)
 data_z['z'] = data_z['z'].astype(float)
-data_z['Chromosome'] = data_z['variant_id'].str.split("_",1,expand=True)[0]
-data_z['position'] = data_z['variant_id'].str.split('_',expand=True)[1]
+# data_z['Chromosome'] = data_z['variant_id'].str.split("_",1,expand=True)[0]
+# data_z['position'] = data_z['variant_id'].str.split('_',expand=True)[1]
 
 # Get list of features names for each subset
 epigenomicFeatures = list(i for i in data_z.columns if i.startswith('enha') or i.startswith('prom'))[2:]
@@ -29,9 +29,9 @@ regbuild_activityFeatures = list(i for i in data_z.columns if i.startswith('acti
 regbuild_dataFeature = ['RegElementInfo']
 hiCFeatures = list(i for i in data_z.columns if i.startswith('hi'))
 eQTLFeatures = list(eqtl.columns[2:-1])
-distanceFeature = ['var_prom_distance','var_enh_distance']
-chrFeature = ['Chromosome']
-posfeature = ['position']
+distanceFeature = ['var_prom_distance','var_enh_distance','tss_distance']
+chrFeature = ['chr']
+posfeature = ['variant_pos']
 
 combinations = {}
 combinations['Epigenomics'] = [epigenomicFeatures]
