@@ -73,6 +73,6 @@ with open(outfile,'w+') as f:
         importances = list(random_forest_z.feature_importances_)
         feature_importances = [(feature, round(importance, 2)) for feature, importance in zip(feature_list, importances)]
         feature_importances = sorted(feature_importances, key=lambda x: x[1], reverse=True)
-        for pair in feature_importances[:10]: print('Variable:\t{}\tImportance:\t{}'.format(*pair),file=outfolder+i+'_feature_importance.csv')
+        for pair in feature_importances[:10]: print('Variable:\t{}\tImportance:\t{}'.format(*pair),file=outfolder+i+'_top_feature_importance.csv')
     dummy = dummy_regressor(data_z, X_label, 'z', random_state)
     print('Dummy: {:.4f}'.format(dummy['rmse']), file=f)
