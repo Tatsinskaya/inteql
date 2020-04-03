@@ -67,8 +67,12 @@ with open(outfile,'w+') as f:
         # decision_tree_z = decision_tree_regressor(data_z, X_label, 'z', random_state=random_state)
         print("{}\t{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}".format(i,random_forest['rmse'],random_forest_z['rmse'], random_forest['r_value'], random_forest_z['r_value']), file=f)
         pd.DataFrame(random_forest_z['y_test']).reset_index(drop=True).join(pd.DataFrame(random_forest_z['y_pred'])).to_csv(outfolder+i+'_Real_vs_pred.csv')
-        data_z.loc[random_forest_z['y_test'].index].to_csv(outfolder+i+'_ytest.csv')
+        data_z.loc[random_forest_z['y_test'].index].to_csv(outfolder+i+'_real.csv')
         pd.DataFrame(['y_pred']).to_csv(outfolder+i+'_predicted.csv')
         # data_z.loc[random_forest_z['y_train'].index].to_csv(outfolder+'ytrain.csv')
+        importances = list(random_forest_z.feature_importances_)
+        feature_importances = [(feature, round(importance, 2)) for feature, importance in zip(feature_list, importances)]
+        feature_importances = sorted(feature_importances, key=lambda x: x[1], reverse=True)
+        for pair in feature_importances[:10]: print('Variable:\t{}\tImportance:\t{}'.format(*pair),file=outfolder+i+'_feature_importance.csv')
     dummy = dummy_regressor(data_z, X_label, 'z', random_state)
     print('Dummy: {:.4f}'.format(dummy['rmse']), file=f)

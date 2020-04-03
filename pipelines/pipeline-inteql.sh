@@ -126,6 +126,7 @@ for i in $chromosomes; do
 done
 
 echo -e "############\nExecuting script 10_modeling.py with All chromosomes, time: $(date +"%H:%M:%S")"
+mkdir -p $perchroutput10"ALL/"
 bsub -J 'x10_ALLx' -o $outputstdin"output10_my-stdin_chrALL.txt" -e $outputstderr"output10_my-stderr_chrALL.txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py $output09 $output05 "$perchroutput10"output10_ALL.csv" $perchroutput10"ALL/"
 
 for i in $chromosomes; do
@@ -137,10 +138,10 @@ echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 # Provide Script 10 overall output
 for i in $chromosomes; do
   if [ -e "$perchroutput09"output09_$i.csv.gz ]; then
-    awk -F $'\t' -v CHR="$i" '{if(NR==2&&CHR==1) print $1 FS $2 FS $3 FS $4 FS $5 FS "Chromosome"; else if(NR>=3&&NR<=11) print $1 FS $2 FS $3 FS $4 FS $5 FS CHR}' $perchroutput10"output10_$i.csv"
+    awk -F $'\t' -v CHR="$i" '{if(NR==2&&CHR==1) print $1 FS $2 FS $3 FS $4 FS $5 FS "Chromosome"; else if(NR>=3&&NR<=10) print $1 FS $2 FS $3 FS $4 FS $5 FS CHR}' $perchroutput10"output10_$i.csv"
   fi
 done >$output10
-awk -F $'\t' '{if(NR>=3&&NR<=11) print $1 FS $2 FS $3 FS $4 FS $5 FS "All"}' $perchroutput10'output10_ALL.csv' >> $output10
+awk -F $'\t' '{if(NR>=3&&NR<=10) print $1 FS $2 FS $3 FS $4 FS $5 FS "All"}' $perchroutput10'output10_ALL.csv' >> $output10
 
 echo -e "############ RUN FINISHED ############"
 echo -e "############ $(date) ############"
