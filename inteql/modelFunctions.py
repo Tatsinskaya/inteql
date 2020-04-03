@@ -80,10 +80,10 @@ def random_forest_regressor(data, X_label, y_label, random_state, test_size=0.3,
     y_pred = model.predict(X_test)
     rmse = np.sqrt(mean_squared_error(y_test, y_pred))
     slope, intercept, r_value, p_value, std_err = linregress(y_test, y_pred)
-    
-    
+    importances = list(model.feature_importances_)
+    feature_list = list(X.columns)
     # Return result object
-    return {'rmse':rmse, 'model':model, 'y_pred':y_pred, 'r_value':r_value, 'y_test':y_test}
+    return {'rmse':rmse, 'model':model, 'y_pred':y_pred, 'r_value':r_value, 'y_test':y_test, 'importances':importances,'features':feature_list}
 
 def dummy_regressor(data, X_label, y_label, random_state, test_size=0.3):
     """

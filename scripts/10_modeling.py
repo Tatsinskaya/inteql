@@ -70,7 +70,8 @@ with open(outfile,'w+') as f:
         data_z.loc[random_forest_z['y_test'].index].to_csv(outfolder+i+'_real.csv')
         pd.DataFrame(['y_pred']).to_csv(outfolder+i+'_predicted.csv')
         # data_z.loc[random_forest_z['y_train'].index].to_csv(outfolder+'ytrain.csv')
-        importances = list(random_forest_z.feature_importances_)
+        importances = random_forest_z[importances]
+        feature_list =random_forest_z[features]
         feature_importances = [(feature, round(importance, 2)) for feature, importance in zip(feature_list, importances)]
         feature_importances = sorted(feature_importances, key=lambda x: x[1], reverse=True)
         for pair in feature_importances[:10]: print('Variable:\t{}\tImportance:\t{}'.format(*pair),file=outfolder+i+'_top_feature_importance.csv')
