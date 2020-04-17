@@ -49,11 +49,9 @@ temptraindata = pd.DataFrame()
 testdata = pd.DataFrame()
 traindata = pd.DataFrame()
 for i in pd.unique(data_z['chr']):
-    limit = np.percentile(np.array(data_z[data_z['chr'] == str(i)]['variant_pos']), 33)
-    temptestdata = pd.DataFrame(
-        data_z[data_z['chr'] == str(i)][data_z[data_z['chr'] == str(i)]['variant_pos'] >= limit])
-    temptraindata = pd.DataFrame(
-        data_z[data_z['chr'] == str(i)][data_z[data_z['chr'] == str(i)]['variant_pos'] < limit])
+    limit = np.percentile(np.array(data_z[data_z['chr'] == i]['variant_pos']), 33)
+    temptestdata = pd.DataFrame(data_z[data_z['chr'] == i][data_z[data_z['chr'] == i]['variant_pos'] >= limit])
+    temptraindata = pd.DataFrame(data_z[data_z['chr'] == i][data_z[data_z['chr'] == i]['variant_pos'] < limit])
     frames1 = [temptestdata, testdata]
     frames2 = [temptraindata, traindata]
     testdata = pd.concat(frames1)
