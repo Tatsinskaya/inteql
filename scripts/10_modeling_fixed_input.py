@@ -127,5 +127,5 @@ with open(outfile, 'w+') as f:
         with open(outfolder + str(i) + '_top_feature_importance_raw.csv', 'a') as impfile:
             for pair in feature_importances[:10]:
                 print('Variable:\t{}\tImportance:\t{}'.format(*pair), file=impfile)
-    dummy = dummy_regressor(data_z, X_label, '', 42)
+    dummy = dummy_regressor(data_z, X_label, 'z', 42)
     print('Dummy: {:.4f}'.format(dummy['rmse']), file=f)
