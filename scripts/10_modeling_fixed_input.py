@@ -14,10 +14,16 @@ from scipy.stats import linregress
 def random_forest_regressor_fixed_split(traindata_model, testdata_model, X_label, y_label, max_depth=83, n_estimators=136,
                                         min_samples_split=2, min_samples_leaf=1, max_features='sqrt'):
     # Split data
-    X_train = traindata_model[X_label]
-    y_train = traindata_model[y_label]
-    X_test = testdata_model[X_label]
-    y_test = testdata_model[y_label]
+    concatenationlist=[traindata_model,testdata_model]
+    data=pd.concat(list)
+    X = data[X_label]
+    y = data[y_label]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+
+    # X_train = traindata_model[X_label]
+    # y_train = traindata_model[y_label]
+    # X_test = testdata_model[X_label]
+    # y_test = testdata_model[y_label]
     # Create a model and train it
     model = RandomForestRegressor(random_state=42, max_depth=max_depth, n_estimators=n_estimators)
     model = model.fit(X_train, y_train)
@@ -56,6 +62,8 @@ for i in pd.unique(data_z['chr']):
     frames2 = [temptraindata, traindata]
     testdata = pd.concat(frames1)
     traindata = pd.concat(frames2)
+
+
 
 # Get list of features names for each subset
 epigenomicFeatures = list(i for i in data_z.columns if i.startswith('enha') or i.startswith('prom'))[2:]
