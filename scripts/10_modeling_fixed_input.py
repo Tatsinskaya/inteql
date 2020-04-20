@@ -18,7 +18,7 @@ def random_forest_regressor_fixed_split(traindata_model, testdata_model, X_label
     data=pd.concat(concatenationlist)
     X = data[X_label]
     y = data[y_label]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
     # X_train = traindata_model[X_label]
     # y_train = traindata_model[y_label]
