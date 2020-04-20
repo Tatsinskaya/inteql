@@ -15,7 +15,7 @@ def random_forest_regressor_fixed_split(traindata_model, testdata_model, X_label
                                         min_samples_split=2, min_samples_leaf=1, max_features='sqrt'):
     # Split data
     concatenationlist=[traindata_model,testdata_model]
-    data=pd.concat(list)
+    data=pd.concat(concatenationlist)
     X = data[X_label]
     y = data[y_label]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
