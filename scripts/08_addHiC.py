@@ -50,7 +50,7 @@ for i in pairs_df.index:
         chromosomes.add(chromosome)
         in_folder_chr = in_folder + '/chr' + chromosome + '/MAPQGE30'
         print(in_folder_chr)
-        contactMatrix = ContactMatrix(in_folder_chr, chrm=chromosome, resl=5000)  # todo adjustable resolution
+        contactMatrix = ContactMatrix(in_folder_chr, chrm=chromosome, resl=5000)  # todo adjustable resolution (also on position2matrixBin)
         print(contactMatrix._matrixPath)
     # Check that the lower bin is on the first dimension
     # and the upper in the second dimension

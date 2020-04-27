@@ -23,36 +23,36 @@ data_z['z'] = data_z['z'].astype(float)
 # data_z['position'] = data_z['variant_id'].str.split('_',expand=True)[1]
 
 # Get list of features names for each subset
+# regbuild_typeFeatures = list(i for i in data_z.columns if i.startswith('type'))
+# regbuild_activityFeatures = list(i for i in data_z.columns if i.startswith('activity'))
+# regbuild_dataFeature = ['RegElementInfo']
 epigenomicFeatures = list(i for i in data_z.columns if i.startswith('enha') or i.startswith('prom'))[2:]
-regbuild_typeFeatures = list(i for i in data_z.columns if i.startswith('type'))
-regbuild_activityFeatures = list(i for i in data_z.columns if i.startswith('activity'))
-regbuild_dataFeature = ['RegElementInfo']
 hiCFeatures = list(i for i in data_z.columns if i.startswith('hi'))
 eQTLFeatures = list(eqtl.columns[2:-1])
-distanceFeature = ['var_prom_distance','var_enh_distance','tss_distance']
+distanceFeature = ['tss_distance']
 chrFeature = ['chr']
 posfeature = ['variant_pos']
 
 combinations = {}
 combinations['Epigenomics'] = [epigenomicFeatures]
-#combinations['RegBuild Type'] = [regbuild_typeFeatures]
-#combinations['RegBuild Act'] = [regbuild_activityFeatures]
-#combinations['RegBuild Data'] = [regbuild_dataFeature]
-#combinations['All Reg'] = [regbuild_dataFeature+regbuild_activityFeatures+regbuild_typeFeatures]
-#combinations['All Reg + eQTL'] = [regbuild_dataFeature+regbuild_activityFeatures+regbuild_typeFeatures+eQTLFeatures]
-#combinations['All Reg + Epi'] = [regbuild_dataFeature+regbuild_activityFeatures+regbuild_typeFeatures+epigenomicFeatures]
 combinations['HiC'] = [hiCFeatures]
 combinations['eQTL'] = [eQTLFeatures]
+combinations['Epi + eQTL'] = [epigenomicFeatures+eQTLFeatures]
+combinations['eQTL + Distance'] = [eQTLFeatures+distanceFeature]
+combinations['All'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature]
+combinations['All + Pos'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature+posfeature]
 # combinations['Distance'] = [distanceFeature]
 # combinations['Distance+Chromosome'] = [distanceFeature+chrFeature]
 # combinations['HiC + Epigenomic'] = [hiCFeatures+epigenomicFeatures]
-combinations['Epi + eQTL'] = [epigenomicFeatures+eQTLFeatures]
-combinations['eQTL + Distance'] = [eQTLFeatures+distanceFeature]
-#combinations['Epi + eQTL + RegBuild Type'] = [epigenomicFeatures+distanceFeature+regbuild_typeFeatures]
-#combinations['Epi + eQTL + RegBuild Act'] = [epigenomicFeatures+distanceFeature+regbuild_activityFeatures]
-#combinations['Epi + eQTL + RegBuild Data'] = [epigenomicFeatures+distanceFeature+regbuild_dataFeature]
-combinations['All'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature]
-combinations['All + Pos'] = [epigenomicFeatures+hiCFeatures+eQTLFeatures+distanceFeature+chrFeature+posfeature]
+# combinations['Epi + eQTL + RegBuild Type'] = [epigenomicFeatures+distanceFeature+regbuild_typeFeatures]
+# combinations['Epi + eQTL + RegBuild Act'] = [epigenomicFeatures+distanceFeature+regbuild_activityFeatures]
+# combinations['Epi + eQTL + RegBuild Data'] = [epigenomicFeatures+distanceFeature+regbuild_dataFeature]
+# combinations['RegBuild Type'] = [regbuild_typeFeatures]
+# combinations['RegBuild Act'] = [regbuild_activityFeatures]
+# combinations['RegBuild Data'] = [regbuild_dataFeature]
+# combinations['All Reg'] = [regbuild_dataFeature+regbuild_activityFeatures+regbuild_typeFeatures]
+# combinations['All Reg + eQTL'] = [regbuild_dataFeature+regbuild_activityFeatures+regbuild_typeFeatures+eQTLFeatures]
+# combinations['All Reg + Epi'] = [regbuild_dataFeature+regbuild_activityFeatures+regbuild_typeFeatures+epigenomicFeatures]
 
 random_state = 42
 
