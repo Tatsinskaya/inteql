@@ -7,10 +7,10 @@ sys.path.append('../inteql/')
 from utils import *
 
 # Read input line
-tpm_top_tab = sys.argv[1]   # '/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output02.tab'
-slope_top = sys.argv[2]     # '/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output05.csv.gz'
+tpm_top_tab = sys.argv[1]   # '/nfs/research1/zerbino/jhidalgo/inteql/data/output/output02.tab'
+slope_top = sys.argv[2]     # '/nfs/research1/zerbino/jhidalgo/inteql/data/output/output05.csv.gz'
 bedfolder = sys.argv[3]     # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/TargetFinder/'
-outfile = sys.argv[4]       # '/nfs/research1/zerbino/jhidalgo/inteql/data/inter_data/output07.csv.gz'  GTEx_Analysis_v7_eQTL_EVB_linearData.csv.gz = output05.csv.gz
+outfile = sys.argv[4]       # '/nfs/research1/zerbino/jhidalgo/inteql/data/output/output07.csv.gz'  GTEx_Analysis_v7_eQTL_EVB_linearData.csv.gz = output05.csv.gz
 annotation_gff_file = sys.argv[5]  # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
 
 genes_top = set()
@@ -23,9 +23,9 @@ with open(tpm_top_tab) as f:
         genes_top.add(geneIdVersion2geneId(line.split()[0]))
 
 data = pd.read_csv(slope_top, compression='gzip')
-data['gene_id'] = data['gene_id'].apply(geneIdVersion2geneId)
+data['gene_id'] = data['gene_id'].apply(geneIdVersion2geneId) # todo necessary?
 # Filter by top genes
-data = data[data['gene_id'].apply(lambda x: x in genes_top)]
+data = data[data['gene_id'].apply(lambda x: x in genes_top)] # todo necessary?
 data = data[pd.isna(data['Cells_EBV-transformed_lymphocytes']).apply(lambda x: not (x))]
 
 # For the PCA and tsne I am going to use only the eQTLs presents everywhere dimData = data.dropna() dimData.shapedimData.to_csv('../data/GTEx_Analysis_v7_eQTL_allTissues_slope_top_complete.csv.gz', index=False, compression='gzip')
@@ -45,7 +45,8 @@ enhancers = pybedtools.BedTool(enhancers_f)
 # Intersection
 variants_enhancers_names = ['variant_chr', 'variant_start', 'variant_end', 'variant_id',
                             'enhancer_chr', 'enhancer_start', 'enhancer_end', 'enhancer_id']
-variants_enhancers = variants.intersect(enhancers, wa=True, wb=True, loj=True).to_dataframe(names=variants_enhancers_names)
+# variants_enhancers = variants.intersect(enhancers, wa=True, wb=True, loj=True).to_dataframe(names=variants_enhancers_names) # todo remove loj
+variants_enhancers = variants.intersect(enhancers, wa=True, wb=True).to_dataframe(names=variants_enhancers_names) # todo add loj
 
 # Save it as a dictionary
 variantID__enhancersID = {}
@@ -65,7 +66,8 @@ promoters = pybedtools.BedTool(bedfolder+'promoters.bed.gz')
 genes_promoter_names = ['gene_chr', 'gene_start', 'gene_end', 'gene_id', 'smth1', 'strand', 'annotation', 'type',
                         'smth2',
                         'promoter_chr', 'promoter_start', 'promoter_end', 'promoter_id']
-genes_promoters = genes.intersect(promoters, wa=True, wb=True, loj=True).to_dataframe(names=genes_promoter_names)
+# genes_promoters = genes.intersect(promoters, wa=True, wb=True, loj=True).to_dataframe(names=genes_promoter_names) # todo remove loj
+genes_promoters = genes.intersect(promoters, wa=True, wb=True).to_dataframe(names=genes_promoter_names) # todo add loj
 # Save a dictionary for the future
 geneID__promotersID = {}
 for i in genes_promoters.index:
