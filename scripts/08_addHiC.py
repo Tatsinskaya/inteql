@@ -1,6 +1,8 @@
 # import libraries needed
 import sys
 import pandas as pd
+import gffpandas.gffpandas as gffpd
+import pybedtools
 
 sys.path.append('../inteql/')
 from utils import *
@@ -10,10 +12,15 @@ from contactMatrix import *
 in_folder = sys.argv[1]  # data/original-data/GM12878_combined/5kb_resolution_intrachromosomal
 pairs_file = sys.argv[2]  # output07.csv
 out_file = sys.argv[3]  # GTEx_Analysis_v7_eQTL_EVB_linearData_hiC.csvz = output08.csv
+bedfolder = sys.argv[4]  # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/TargetFinder/'
+regfolder = sys.argv[5] # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/RegBuild/'
 
 pairs_df = pd.read_csv(pairs_file, compression='gzip')
 # pairs_df = pairs_df[pairs_df['variant_id'].apply(lambda x: x.split('_')[0] != '22')]
 pairs_df = pairs_df.sort_values(by=['variant_id'])
+genes = pybedtools.BedTool(bedfolder+'genes.bed.gz').to_dataframe()
+enhancers = gffpd.read_gff3(regfolder+'enhancer.gff').attributes_to_columns()[['seq_id','bound_start','bound_end','regulatory_feature_stable_id','type','activity']]
+promoters = gffpd.read_gff3(regfolder+'promoter.gff').attributes_to_columns()[['seq_id','bound_start','bound_end','regulatory_feature_stable_id','type','activity']]
 
 # Empty columns
 raw = []
@@ -31,7 +38,8 @@ for i in pairs_df.index:
     # For each eQTL sets the chromosome,
     # the position of the first element, x, 
     # and the position of the second element, y.
-    if pairs_df.loc[i, ]['enhancer_id'] == '0' or pairs_df.loc[i,]['promoter_id'] == '0':
+    # if pairs_df.loc[i, ]['enhancer_id'] == '0' or pairs_df.loc[i,]['promoter_id'] == '0':
+    if pairs_df.loc[i, ]['enhancer_id'] == '0' or pairs_df.loc[i,]['gene_id'] == '0':
         raw.append(0)
         normalizedExpected_kr.append(0)
         normalizedExpected_vc.append(0)
@@ -40,18 +48,31 @@ for i in pairs_df.index:
         normalized_vc.append(0)
         normalized_sq.append(0)
         continue
-    chromosome = str(variantId2chrNum(pairs_df.loc[i, ]['variant_id']))
-    e = position2matrixBin(region2start(pairs_df.loc[i, ]['enhancer_id']))
-    p = position2matrixBin(region2start(pairs_df.loc[i, ]['promoter_id']))
+    if pairs_df.loc[i,]['promoter_id'] == '0':
+        gene = genes[genes['name'] == pairs_df.loc[i,]['gene_id']]
+        if gene['strand'].item() == '-':
+            p = position2matrixBin(int(gene['end'].item()))
+        if gene['strand'].item() == '+':
+            p = position2matrixBin(int(gene['start'].item()))
+    else:
+        promoter = promoters[promoters['regulatory_feature_stable_id'] == pairs_df.loc[i, ]['promoter_id']]
+        p_start=int(promoter['bound_start'].item())
+        p_end=int(enhancer['bound_end'].item())
+        p = position2matrixBin(int(p_start+(p_end-p_start)/2)) #todo function?
+    enhancer = enhancers[enhancers['regulatory_feature_stable_id'] == pairs_df.loc[i, ]['enhancer_id']]
+    chromosome = str(enhancer['seq_id'].item())
+    e_start=int(enhancer['bound_start'].item())
+    e_end=int(enhancer['bound_end'].item())
+    e = position2matrixBin(int(e_start+(e_end-e_start)/2))
     x, y = sorted([p, e])
     if chromosome not in chromosomes:
         # Note that the data is sorted by chromosome, so, each contact matrix is computed once.
         # And used until next chromosome is found.
         chromosomes.add(chromosome)
         in_folder_chr = in_folder + '/chr' + chromosome + '/MAPQGE30'
-        print(in_folder_chr)
+        # print(in_folder_chr)
         contactMatrix = ContactMatrix(in_folder_chr, chrm=chromosome, resl=5000)  # todo adjustable resolution (also on position2matrixBin)
-        print(contactMatrix._matrixPath)
+        # print(contactMatrix._matrixPath)
     # Check that the lower bin is on the first dimension
     # and the upper in the second dimension
     # If so, add the contact value 

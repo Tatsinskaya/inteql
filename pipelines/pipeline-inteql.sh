@@ -9,7 +9,7 @@ databases=$inputdata"/databases/"
 HiCFolder=$inputdata"/GM12878_combined/5kb_resolution_intrachromosomal"
 dbSNPFolder=$inputdata"/dbSNP/chr-header/"
 scriptfolder='../scripts/'
-regbuildgff=$inputdata'/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
+regbuildfolder=$inputdata'/RegBuild/'
 postgaplib="/homes/jhidalgo/lib/postgap/lib/"
 
 #OUTPUTS
@@ -83,14 +83,14 @@ echo -e "############\nSkipping script 6, time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 07 ###
 echo -e "############\nExecuting script 07_addLinear.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x07x' -M 6000 -o $outputstdin"output07_my-stdin.txt" -e $outputstderr"output07_my-stderr.txt" "python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildgff"
+bsub -J 'x07x' -M 6000 -o $outputstdin"output07_my-stdin.txt" -e $outputstderr"output07_my-stderr.txt" "python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildfolder"
 bwait -w 'ended(x07x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output07 ]; then echo "File $output07 not found." ; exit ; fi
 
 ##SCRIPT 08 ###
 echo -e "############\nExecuting script 08_addHiC.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x08x' -M 60000 -o $outputstdin"output08_my-stdin.txt" -e $outputstderr"output08_my-stderr.txt" "python2.7 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08"
+bsub -J 'x08x' -M 60000 -o $outputstdin"output08_my-stdin.txt" -e $outputstderr"output08_my-stderr.txt" "python2.7 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08 $TargetFinder $regbuildfolder"
 bwait -w 'ended(x08x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output08 ]; then echo "File $output08 not found." ; exit ; fi
