@@ -3,7 +3,6 @@ import sys
 import pandas as pd
 import gffpandas.gffpandas as gffpd
 import pybedtools
-
 sys.path.append('../inteql/')
 from utils import *
 from contactMatrix import *
@@ -57,7 +56,7 @@ for i in pairs_df.index:
     else:
         promoter = promoters[promoters['regulatory_feature_stable_id'] == pairs_df.loc[i, ]['promoter_id']]
         p_start=int(promoter['bound_start'].item())
-        p_end=int(enhancer['bound_end'].item())
+        p_end=int(promoter['bound_end'].item())
         p = position2matrixBin(int(p_start+(p_end-p_start)/2)) #todo function?
     enhancer = enhancers[enhancers['regulatory_feature_stable_id'] == pairs_df.loc[i, ]['enhancer_id']]
     chromosome = str(enhancer['seq_id'].item())

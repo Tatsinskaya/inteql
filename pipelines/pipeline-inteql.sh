@@ -90,7 +90,7 @@ if [ ! -f $output07 ]; then echo "File $output07 not found." ; exit ; fi
 
 ##SCRIPT 08 ###
 echo -e "############\nExecuting script 08_addHiC.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x08x' -M 60000 -o $outputstdin"output08_my-stdin.txt" -e $outputstderr"output08_my-stderr.txt" "python2.7 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08 $TargetFinder $regbuildfolder"
+bsub -J 'x08x' -M 60000 -o $outputstdin"output08_my-stdin.txt" -e $outputstderr"output08_my-stderr.txt" "python3.8 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08 $TargetFinder $regbuildfolder"
 bwait -w 'ended(x08x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output08 ]; then echo "File $output08 not found." ; exit ; fi
