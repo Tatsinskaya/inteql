@@ -70,8 +70,8 @@ promoters = pybedtools.BedTool.from_dataframe(promoters_gff)
 # Intersection
 genes_promoter_names = ['gene_chr','gene_start','gene_end','gene_id','trash1','strand','gene_annotation','type','trash2','promoter_chr','promoter_start','promoter_end','promoter_id','typeprom','prom_activity']
 # genes_promoter_names = ['gene_chr', 'gene_start', 'gene_end', 'gene_id', 'smth1', 'strand', 'annotation', 'type','smth2','promoter_chr', 'promoter_start', 'promoter_end', 'promoter_id']
-# genes_promoters = genes.intersect(promoters, wa=True, wb=True, loj=True).to_dataframe(names=genes_promoter_names) # todo remove loj
-genes_promoters = genes.intersect(promoters, wa=True, wb=True).to_dataframe(names=genes_promoter_names) # todo add loj
+genes_promoters = genes.intersect(promoters, wa=True, wb=True, loj=True).to_dataframe(names=genes_promoter_names) # todo remove loj
+# genes_promoters = genes.intersect(promoters, wa=True, wb=True).to_dataframe(names=genes_promoter_names) # todo add loj
 # Save a dictionary for the future
 geneID__promotersID = {}
 for i in genes_promoters.index:

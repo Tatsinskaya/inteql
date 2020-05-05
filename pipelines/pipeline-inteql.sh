@@ -37,8 +37,12 @@ echo "Executing pre-HiC scripts"
 
 if [ -d $outputfolder ]; then
   mkdir -p $backupfolder
-  mv $outputfolder $backupfolder"output_$(date +"%y%m%d")"
-  echo "Previous run files found, moved to backup/output_$(date +"%y%m%d")"
+  if [ -d $backupfolder"output_$(date +"%y%m%d")" ]; then
+    mv $outputfolder $backupfolder"output_$(date +"%y%m%d")"
+    echo "Previous run files found, moved to backup/output_$(date +"%y%m%d")"
+  else
+    mv $outputfolder $backupfolder"output_$(date +"%y%m%d")_1"
+    echo "Previous run files found with same date, moved to backup/output_$(date +"%y%m%d")_1"
 else
   echo "Previous run files not found, creating folders..."
 fi
