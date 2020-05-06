@@ -79,7 +79,7 @@ if [ ! -f $output04 ]; then echo "File $output04 not found." ; exit ; fi
 
 ##SCRIPT 05 ###
 echo -e "############\nExecuting script 05_getPairsSlopeTop.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x05x' -M 12000 -o $outputstdin"output05_my-stdin.txt" -e $outputstderr"output05_my-stderr.txt" "python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
+bsub -J 'x05x' -M 7000 -o $outputstdin"output05_my-stdin.txt" -e $outputstderr"output05_my-stderr.txt" "python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
 bwait -w 'ended(x05x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output05 ]; then echo "File $output05 not found." ; exit ; fi
@@ -89,14 +89,14 @@ echo -e "############\nSkipping script 6, time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 07 ###
 echo -e "############\nExecuting script 07_addLinear.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x07x' -M 10000 -o $outputstdin"output07_my-stdin.txt" -e $outputstderr"output07_my-stderr.txt" "python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildfolder"
+bsub -J 'x07x' -M 6000 -o $outputstdin"output07_my-stdin.txt" -e $outputstderr"output07_my-stderr.txt" "python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildfolder"
 bwait -w 'ended(x07x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output07 ]; then echo "File $output07 not found." ; exit ; fi
 
 ##SCRIPT 08 ###
 echo -e "############\nExecuting script 08_addHiC.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x08x' -M 60000 -o $outputstdin"output08_my-stdin.txt" -e $outputstderr"output08_my-stderr.txt" "python3.8 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08 $TargetFinder $regbuildfolder"
+bsub -J 'x08x' -M 48000 -o $outputstdin"output08_my-stdin.txt" -e $outputstderr"output08_my-stderr.txt" "python3.8 "$scriptfolder"08_addHiC.py $HiCFolder $output07 $output08 $TargetFinder $regbuildfolder"
 bwait -w 'ended(x08x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output08 ]; then echo "File $output08 not found." ; exit ; fi
@@ -106,7 +106,7 @@ echo -e "############\nExecuting script 09_prepareFineMap.py, time: $(date +"%H:
 for i in $chromosomes; do
   echo -e "\nStarting with CHR "$i
   mkdir -p "$perchroutput09"chr_$i
-  bsub -J "x09_"$i"x" -M 3000 -o $outputstdin"output09_my-stdin_chr"$i".txt" -e $outputstderr"output09_my-stderr_chr"$i".txt" "python2.7 "$scriptfolder"09_prepareFineMap.py $databases $output08 $i $dbSNPFolder "$perchroutput09"output09_"$i".csv.gz" $perchroutput09 $eQTLFolder"Cells_EBV-transformed_lymphocytes.v7.signif_variant_gene_pairs.txt.gz" $postgaplib
+  bsub -J "x09_"$i"x" -M 1500 -o $outputstdin"output09_my-stdin_chr"$i".txt" -e $outputstderr"output09_my-stderr_chr"$i".txt" "python2.7 "$scriptfolder"09_prepareFineMap.py $databases $output08 $i $dbSNPFolder "$perchroutput09"output09_"$i".csv.gz" $perchroutput09 $eQTLFolder"Cells_EBV-transformed_lymphocytes.v7.signif_variant_gene_pairs.txt.gz" $postgaplib
   bwait -w "ended(x09_"$i"x)" # Remove for parallel Finemapping
 done
 
@@ -124,7 +124,7 @@ for i in $chromosomes; do
   if [ -e "$perchroutput09"output09_$i.csv.gz ]; then
     mkdir -p $perchroutput10$i
     echo -e "############\nExecuting script 10_modeling.py with chr $i, time: $(date +"%H:%M:%S")"
-    bsub -J "x10_"$i"x" -o $outputstdin"output10_my-stdin_chr$i.txt" -e $outputstderr"output10_my-stderr_chr"$i".txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py "$perchroutput09"output09_"$i".csv.gz" $output05 $perchroutput10"output10_"$i".csv" $perchroutput10$i"/"
+    bsub -J "x10_"$i"x" -o $outputstdin"output10_my-stdin_chr$i.txt" -e $outputstderr"output10_my-stderr_chr"$i".txt" -M 10000 "python2.7 "$scriptfolder"10_modeling.py "$perchroutput09"output09_"$i".csv.gz" $output05 $perchroutput10"output10_"$i".csv" $perchroutput10$i"/"
   else
     echo -e "############\nSkipping script 10_modeling.py with chr $i due to missing file, time: $(date +"%H:%M:%S")"
     bsub -J "x10_"$i"x" -o /dev/null -e /dev/null "sleep 1"
@@ -133,7 +133,7 @@ done
 
 echo -e "############\nExecuting script 10_modeling.py with All chromosomes, time: $(date +"%H:%M:%S")"
 mkdir -p $perchroutput10"ALL/"
-bsub -J 'x10_ALLx' -o $outputstdin"output10_my-stdin_chrALL.txt" -e $outputstderr"output10_my-stderr_chrALL.txt" -M 3000 "python2.7 "$scriptfolder"10_modeling.py $output09 $output05 "$perchroutput10"output10_ALL.csv" $perchroutput10"ALL/"
+bsub -J 'x10_ALLx' -o $outputstdin"output10_my-stdin_chrALL.txt" -e $outputstderr"output10_my-stderr_chrALL.txt" -M 10000 "python2.7 "$scriptfolder"10_modeling.py $output09 $output05 "$perchroutput10"output10_ALL.csv" $perchroutput10"ALL/"
 
 for i in $chromosomes; do
   bwait -w "ended(x10_"$i"x)"
