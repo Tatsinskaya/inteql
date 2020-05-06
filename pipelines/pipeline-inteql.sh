@@ -79,7 +79,7 @@ if [ ! -f $output04 ]; then echo "File $output04 not found." ; exit ; fi
 
 ##SCRIPT 05 ###
 echo -e "############\nExecuting script 05_getPairsSlopeTop.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x05x' -M 6000 -o $outputstdin"output05_my-stdin.txt" -e $outputstderr"output05_my-stderr.txt" "python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
+bsub -J 'x05x' -M 12000 -o $outputstdin"output05_my-stdin.txt" -e $outputstderr"output05_my-stderr.txt" "python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
 bwait -w 'ended(x05x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output05 ]; then echo "File $output05 not found." ; exit ; fi
@@ -89,7 +89,7 @@ echo -e "############\nSkipping script 6, time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 07 ###
 echo -e "############\nExecuting script 07_addLinear.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x07x' -M 6000 -o $outputstdin"output07_my-stdin.txt" -e $outputstderr"output07_my-stderr.txt" "python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildfolder"
+bsub -J 'x07x' -M 10000 -o $outputstdin"output07_my-stdin.txt" -e $outputstderr"output07_my-stderr.txt" "python "$scriptfolder"07_addLinear.py $output02 $output05 $TargetFinder $output07 $regbuildfolder"
 bwait -w 'ended(x07x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output07 ]; then echo "File $output07 not found." ; exit ; fi
