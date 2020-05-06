@@ -29,20 +29,21 @@ perchroutput10=$outputfolder"modeling/"                            ### MUST CONT
 outputstdin=$outputfolder"stdin/"                                  ### MUST CONTAIN FINAL /
 outputstderr=$outputfolder"stderr/"                                ### MUST CONTAIN FINAL /
 backupfolder="../data/backup/"                                     ### MUST CONTAIN FINAL /
+backupdestination=$backupfolder"output_$(date +"%y%m%d")"
 
-topgenes="5000"
+topgenes="20000"
 chromosomes="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X"
 
 echo "Executing pre-HiC scripts"
-
 if [ -d $outputfolder ]; then
   mkdir -p $backupfolder
-  if [ -d $backupfolder"output_$(date +"%y%m%d")" ]; then
-    mv $outputfolder $backupfolder"output_$(date +"%y%m%d")"
-    echo "Previous run files found, moved to backup/output_$(date +"%y%m%d")"
+  if [ -d $backupdestination ]; then
+    backupdestination=$backupdestination'_1'
+    mv $outputfolder $backupdestination
+    echo "Previous run files found with same date, moved to $backupdestination"
   else
-    mv $outputfolder $backupfolder"output_$(date +"%y%m%d")_1"
-    echo "Previous run files found with same date, moved to backup/output_$(date +"%y%m%d")_1"
+    mv $outputfolder $backupdestination
+    echo "Previous run files found, moved to $backupdestination"
   fi
 else
   echo "Previous run files not found, creating folders..."
@@ -54,14 +55,14 @@ mkdir -p $outputstderr
 
 ##SCRIPT 01 getTopGenesInd###
 echo -e "############\nExecuting script 01_getTopGenesInd.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x01x' -M 1000 -o $outputstdin"output01_my-stdin.txt" -e $outputstderr"output01_my-stderr.txt" "python "$scriptfolder"01_getTopGenesInd.py $inputGTEX $output01 $topgenes"
+bsub -J 'x01x' -M 500 -o $outputstdin"output01_my-stdin.txt" -e $outputstderr"output01_my-stderr.txt" "python "$scriptfolder"01_getTopGenesInd.py $inputGTEX $output01 $topgenes"
 bwait -w 'ended(x01x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output01".npy" ]; then echo "File $output01 not found." ; exit ; fi
 
 ##SCRIPT 02 getTopGenesData###
 echo -e "############\nExecuting script 02_getTopGenesData.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x02x' -M 1000 -o $outputstdin"output02_my-stdin.txt" -e $outputstderr"output02_my-stderr.txt" "python "$scriptfolder"02_getTopGenesData.py "$output01".npy $inputGTEX $output02"
+bsub -J 'x02x' -M 500 -o $outputstdin"output02_my-stdin.txt" -e $outputstderr"output02_my-stderr.txt" "python "$scriptfolder"02_getTopGenesData.py "$output01".npy $inputGTEX $output02"
 bwait -w 'ended(x02x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output02 ]; then echo "File $output02 not found." ; exit ; fi
@@ -71,14 +72,14 @@ echo -e "############\nSkipping script 3, time: $(date +"%H:%M:%S")"
 
 ##SCRIPT 04 ###
 echo -e "############\nExecuting script 04_getPairsIdTop.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x04x' -M 1000 -o $outputstdin"output04_my-stdin.txt" -e $outputstderr"output04_my-stderr.txt" "python "$scriptfolder"04_getPairsIdTop.py $eQTLFolder $output02 $output04"
+bsub -J 'x04x' -M 2000 -o $outputstdin"output04_my-stdin.txt" -e $outputstderr"output04_my-stderr.txt" "python "$scriptfolder"04_getPairsIdTop.py $eQTLFolder $output02 $output04"
 bwait -w 'ended(x04x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output04 ]; then echo "File $output04 not found." ; exit ; fi
 
 ##SCRIPT 05 ###
 echo -e "############\nExecuting script 05_getPairsSlopeTop.py, time: $(date +"%H:%M:%S")"
-bsub -J 'x05x' -M 4000 -o $outputstdin"output05_my-stdin.txt" -e $outputstderr"output05_my-stderr.txt" "python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
+bsub -J 'x05x' -M 6000 -o $outputstdin"output05_my-stdin.txt" -e $outputstderr"output05_my-stderr.txt" "python "$scriptfolder"05_getPairsSlopeTop.py $eQTLFolder $output04 $output05"
 bwait -w 'ended(x05x)'
 echo -e "############\nFinished at time: $(date +"%H:%M:%S")"
 if [ ! -f $output05 ]; then echo "File $output05 not found." ; exit ; fi
