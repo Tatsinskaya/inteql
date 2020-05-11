@@ -11,7 +11,7 @@ tpm_top_tab = sys.argv[1]   # '/nfs/research1/zerbino/jhidalgo/inteql/data/outpu
 slope_top = sys.argv[2]     # '/nfs/research1/zerbino/jhidalgo/inteql/data/output/output05.csv.gz'
 bedfolder = sys.argv[3]     # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/TargetFinder/'
 outfile = sys.argv[4]       # '/nfs/research1/zerbino/jhidalgo/inteql/data/output/output07.csv.gz'  GTEx_Analysis_v7_eQTL_EVB_linearData.csv.gz = output05.csv.gz
-regfolder = sys.argv[5]  # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/homo_sapiens.GRCh37.GM12878.Regulatory_Build.regulatory_activity.20180925.gff'
+regfolder = sys.argv[5]  # '/nfs/research1/zerbino/jhidalgo/inteql/data/original-data/RegBuild/'
 
 genes_top = set()
 header = True
