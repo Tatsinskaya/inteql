@@ -33,6 +33,7 @@ distanceFeature = ['tss_distance']
 chrFeature = ['chr']
 posfeature = ['variant_pos']
 
+
 combinations = {}
 combinations['Epigenomics'] = [epigenomicFeatures]
 combinations['HiC'] = [hiCFeatures]
